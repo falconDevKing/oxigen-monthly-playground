@@ -1,0 +1,28 @@
+{
+  "name": "oxigen-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon"
+  },
+  "author": "EMMANUEL OYEKAN",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.16.3",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.326.0",
+    "@aws-sdk/client-s3": "^3.328.0",
+    "@aws-sdk/lib-dynamodb": "^3.326.0",
+    "@types/uuid": "^9.0.1",
+    "axios": "^1.4.0",
+    "dotenv": "^16.0.3",
+    "moment": "^2.29.4",
+    "uuid": "^9.0.0"
+  }
+}

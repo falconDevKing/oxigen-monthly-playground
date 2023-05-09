@@ -1,0 +1,50 @@
+API --> Fetch All Clients
+Logic --> generate dates
+Logic --> determine upper date for sales 
+API --> Fetch Services 
+API --> Fetch Sales -> upperDate(3) to weekBegin 
+Logic --> Filter for intro services and store the Ids
+Logic --> Filter clients for new week leads and store thier ids [weekLeadsIds]
+Logic  --> Get count of week leads trials
+Logic --> get percent of week leads to trials
+Logic --> Filter clients for new month leads and store thier ids [monthLeadsIds]
+Logic  --> Get count of month leads trials
+Logic --> get percent of month leads to trials
+Logic --> get ids of packs and classes services ids
+Logic --> get ids of leads and active clients
+API --> Fetch Client(14) complete info
+Logic --> get mothlyBilled Leads Ids
+Logic --> get mothlyBilled Leads
+Logic --> get mothlyBilled Leads percent
+Logic --> get packs and upfront Leads
+Logic --> get packs and upfront Leads percent
+Logic --> get Leads purchased nothing
+Logic --> get trials purchased
+Logic --> get trials purchasers Ids
+API --> fetch Visits (paid and unpaid) [23 + totalBilledIds + X]
+Logic --> {sort for trial purchasers visits} get trials purchasers with visits
+Logic --> get trials purchasers with visits ids
+Logic --> get trials purchasers with visits percent
+Logic --> get trials purchasers with visits to billed members
+Logic --> get trials purchasers with visits to billed members percent
+Logic --> get packs and upront month
+Logic -->  group membershipsids by groups and import (M)
+Logic --> create fnction to group clients by statuses
+Logic --> create fnction to group clients by membershipsid
+Logic --> exceute client grouping function and combined
+Logic -->  get total active billed and billed clients
+API --> get previous billed members, and termination values (X)
+Logic --> get billedMemberGrowth and Termination growth
+Logic --> get Attrition rate
+Logic --> get sales by category
+Logic --> get totalWeeklysales growth
+Logic --> get accountBalance
+Logic --> get average billing per member
+Logic --> get clients visits
+Logic --> get clients missed Visits
+Logic --> get clients unpaid visits
+
+
+aws lambda create-function --function-name oxigenF45SohoTest --runtime "nodejs16.x" --role arn:aws:iam::013882496498:role/oxigen-lambda-role --handler index.handler --zip-file "fileb://C:/Users/IMPECCABLENUEL/Desktop/OTHERS/oxigen-f45-Soho-lambda/dist/index.zip" 
+
+tar -cvzf index.zip index.js*"

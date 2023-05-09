@@ -1,0 +1,307 @@
+{
+  "PaginationResponse": {
+    "RequestedLimit": 200,
+    "RequestedOffset": 0,
+    "PageSize": 11,
+    "TotalResults": 11
+  },
+  "Products": [
+    {
+      "ProductId": 2,
+      "Id": "2",
+      "CategoryId": 32,
+      "SubCategoryId": 0,
+      "Price": 1.0,
+      "TaxIncluded": 0.0,
+      "TaxRate": 0.0,
+      "GroupId": 2,
+      "Name": "Towel",
+      "OnlinePrice": 1.0,
+      "ShortDescription": null,
+      "LongDescription": null,
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": null,
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 100026,
+      "Id": "1216230685",
+      "CategoryId": 32,
+      "SubCategoryId": 0,
+      "Price": 35.0,
+      "TaxIncluded": 5.83,
+      "TaxRate": 0.0,
+      "GroupId": 100026,
+      "Name": "F45 LionHeart (Heart Rate Monitor)",
+      "OnlinePrice": 35.0,
+      "ShortDescription": null,
+      "LongDescription": "<div><span style=\"font-size:10px;\">Take your workouts to the next level with our very own in house Heart Rate Technology: Lionheart 🦁🔥</span></div>",
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": "https://clients-content.mindbodyonline.com/studios/f45soho/products/100026.jpg?osv=637612649900000000",
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 600003,
+      "Id": "8753232495",
+      "CategoryId": 32,
+      "SubCategoryId": 0,
+      "Price": 50.0,
+      "TaxIncluded": 8.33,
+      "TaxRate": 0.0,
+      "GroupId": 600003,
+      "Name": "✘  F45 MEMBER BIG BIG CHALLENGE SIGN UP ✘",
+      "OnlinePrice": 50.0,
+      "ShortDescription": "THE BIG BIG CHALLENGE",
+      "LongDescription": "<div><span style=\"font-size:12px;\">Join F45 Oxford Circus &amp; F45 Soho as we embark on our biggest &amp; best Challenge to date.</span>\r\n<p><span style=\"font-size:12px;\">You can expect:</span></p>\r\n<p><span style=\"font-size:12px;\">- The best training &amp; in house weekly challenges with friendly competition</span></p>\r\n<p><span style=\"font-size:12px;\">- Before &amp; after body scans</span></p>\r\n<p><span style=\"font-size:12px;\">- Custom team vests</span></p>\r\n<p><span style=\"font-size:12px;\">- A chance of winning from a &pound;1000 cash prize pool</span></p>\r\n<p><span style=\"font-size:12px;\">- Entry to the Christmas Party with an afterparty to remember</span></p>\r\n<p><span style=\"font-size:12px;\">This will NOT be one to miss.</span></p>\r\n<p><span style=\"font-size:12px;\">Big ❤️</span></p>\r\n</div>",
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": "https://clients-content.mindbodyonline.com/studios/f45soho/products/600003.jpg?osv=637689634750000000",
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 1,
+      "Id": "1",
+      "CategoryId": 36,
+      "SubCategoryId": 0,
+      "Price": 1.0,
+      "TaxIncluded": 0.0,
+      "TaxRate": 0.0,
+      "GroupId": 1,
+      "Name": "Water",
+      "OnlinePrice": 1.0,
+      "ShortDescription": null,
+      "LongDescription": null,
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": null,
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 100052,
+      "Id": "8553532791",
+      "CategoryId": 99999,
+      "SubCategoryId": 0,
+      "Price": 45.0,
+      "TaxIncluded": 7.5,
+      "TaxRate": 0.0,
+      "GroupId": 100052,
+      "Name": "Full ACCUNIQ Body Scan",
+      "OnlinePrice": 45.0,
+      "ShortDescription": null,
+      "LongDescription": "<div><span style=\"font-size:10px;\">Book in for a whole body scan on one of our top of the range Accuniq body scanning machines.</span></div>",
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": "https://clients-content.mindbodyonline.com/studios/f45soho/products/100052.jpg?osv=637612649900000000",
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 600016,
+      "Id": "9527690005",
+      "CategoryId": 99999,
+      "SubCategoryId": 0,
+      "Price": 15.0,
+      "TaxIncluded": 2.5,
+      "TaxRate": 0.0,
+      "GroupId": 600016,
+      "Name": "MNR x F45 Soho Class (13.03 @ 12.30pm)",
+      "OnlinePrice": 15.0,
+      "ShortDescription": null,
+      "LongDescription": "<div><span style=\"font-size:12px;color:#3c3a70;\"><strong>NB. &pound;5 OF THE FEE IS DONATED TOWARDS CHARITIES HELPING UKRAINE</strong></span></div>\r\n<div><span style=\"font-size:12px;color:#3c3a70;\"><strong><br/></strong></span></div>\r\n<div><span style=\"font-size:12px;color:#3c3a70;\"><strong>Welcome to F45 Soho.</strong> We can't wait to deliver you all the sweaty fun vibes on <strong>Sunday 13th March at 12.30pm</strong>. Please aim to be there at least 10 minutes in advance. We have showers, changing facilities, and provide towels too! 🙌</span></div>\r\n<div><span style=\"font-size:12px;color:#3c3a70;\"><br/></span></div>\r\n<div><strong><span style=\"font-size:12px;color:#3c3a70;\">What is F45?</span></strong></div>\r\n<div>&nbsp;</div>\r\n<div><span style=\"color:#3c3a70;\"><span style=\"font-size:12px;\">We deliver an abundance of fitness and mix it with a load of fun - bringing you the best workout in just 45 minutes. 😅 F45 Training is a global fitness community specialising&nbsp;in innovative, high-intensity group workouts that are fast, fun, and results-driven. The F stands for Functional Training, a mix of Circuit and HIIT style workouts geared towards everyday movement and strength. 45 is the total amount of time for sweat-dripping, heart-pumping fun.&nbsp;</span></span></div>\r\n<div><span style=\"font-size:12px;color:#3c3a70;\"><br/></span></div>\r\n<div><span style=\"font-size:12px;color:#3c3a70;\">See you soon!! 👊</span></div>",
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": "https://clients-content.mindbodyonline.com/studios/f45soho/products/600016.jpg?osv=637818460830000000",
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 600032,
+      "Id": "7891087078",
+      "CategoryId": 99999,
+      "SubCategoryId": 0,
+      "Price": 0.0,
+      "TaxIncluded": 0.0,
+      "TaxRate": 0.0,
+      "GroupId": 600032,
+      "Name": "Studio Event Hire",
+      "OnlinePrice": 0.0,
+      "ShortDescription": null,
+      "LongDescription": null,
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": null,
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 600033,
+      "Id": "2895739243",
+      "CategoryId": 99999,
+      "SubCategoryId": 0,
+      "Price": 0.0,
+      "TaxIncluded": 0.0,
+      "TaxRate": 0.0,
+      "GroupId": 600033,
+      "Name": "Corporate Class",
+      "OnlinePrice": 0.0,
+      "ShortDescription": null,
+      "LongDescription": null,
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": null,
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 600034,
+      "Id": "7056898035",
+      "CategoryId": 99999,
+      "SubCategoryId": 0,
+      "Price": 15.0,
+      "TaxIncluded": 2.5,
+      "TaxRate": 0.0,
+      "GroupId": 600034,
+      "Name": "Suspension Fee",
+      "OnlinePrice": 15.0,
+      "ShortDescription": null,
+      "LongDescription": "",
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": null,
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 605001,
+      "Id": "3443070533",
+      "CategoryId": 99999,
+      "SubCategoryId": 0,
+      "Price": 13.5,
+      "TaxIncluded": 2.25,
+      "TaxRate": 0.0,
+      "GroupId": 605001,
+      "Name": "F45 Social at Crazy Golf: Saturday 4th. 12.30-2pm",
+      "OnlinePrice": 13.5,
+      "ShortDescription": null,
+      "LongDescription": "<div>Please join us for some fun at Swingers Crazy Golf on Saturday 4th March 🏌️</div>\r\n<div>&nbsp;</div>\r\n<div>Timings: Arrive 12.15pm for a 12.30pm kick off ⛳️</div>\r\n<div>&nbsp;</div>\r\n<div>Address: Swingers West End, 15 John Prince's St, London W1G 0AB 🏌️</div>",
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": "https://clients-content.mindbodyonline.com/studios/f45soho/products/605001.jpg?osv=638128385200000000",
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    },
+    {
+      "ProductId": 605002,
+      "Id": "6114966478",
+      "CategoryId": 99999,
+      "SubCategoryId": 0,
+      "Price": 82.5,
+      "TaxIncluded": 13.75,
+      "TaxRate": 0.0,
+      "GroupId": 605002,
+      "Name": "Turf Games Team Entry 🏋️ - Saturday 8th July 2023",
+      "OnlinePrice": 82.5,
+      "ShortDescription": null,
+      "LongDescription": "<div>Join one of our teams as we take on Summer Turf Games 2023.\r\n<p>Don't worry if you have haven't even got a team - we will source you one in the everyday athlete category.</p>\r\n<p><strong>About Turf Games</strong></p>\r\n<p>Turf Games realises the social benefit of team sport and the value this places on your weekly training and exercise.</p>\r\n<p><em>&ldquo;I wanted to create something where everyday people, like myself, who work out, lift weights and stay fit, can work towards a competitive event alongside their friends.&rdquo;</em>, says Andrew Manteit, Founder of Turf Games.</p>\r\n<p><br/>Unless you play an organised team sport, which many stop doing once they leave school or university, there are few opportunities to be challenged in a competitive environment &amp; to enjoy the camaraderie that team-based activities offer.</p>\r\n</div>",
+      "TypeGroup": 9,
+      "SupplierId": 100,
+      "SupplierName": "F45 Training SOHO",
+      "ImageURL": "https://clients-content.mindbodyonline.com/studios/f45soho/products/605002.jpg?osv=638137078120000000",
+      "Color": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "Size": {
+        "Id": 1,
+        "Name": "None"
+      },
+      "ManufacturerId": null
+    }
+  ]
+}

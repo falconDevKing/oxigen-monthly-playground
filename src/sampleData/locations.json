@@ -1,0 +1,84 @@
+{
+  "PaginationResponse": {
+    "RequestedLimit": 100,
+    "RequestedOffset": 0,
+    "PageSize": 2,
+    "TotalResults": 2
+  },
+  "Locations": [
+    {
+      "AdditionalImageURLs": [
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121614/cropped_DSC09005_3.JPG?1648734266",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121616/cropped_IMG_0152_2.JPG?1648734300",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121617/cropped_DSC09929_2.JPG?1648734303",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121618/cropped_IMG_1360.JPG?1648734306",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121619/cropped_IMG_1405.JPG?1648734309",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121615/cropped_DSC09048_3.JPG?1648734309",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121620/cropped_IMG_1413.JPG?1648734311",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121621/cropped_IMG_1149.JPG?1648734314",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121622/cropped_IMG_0153.JPG?1648734349",
+        "https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/150556/gallery_images/1121623/cropped_IMG_0167.JPG?1648734352"
+      ],
+      "Address": "14a Dufour's Place",
+      "Address2": "London W1F 7SN",
+      "Amenities": [
+        {
+          "Id": 2,
+          "Name": "Lockers"
+        },
+        {
+          "Id": 6,
+          "Name": "Showers"
+        }
+      ],
+      "BusinessDescription": "Welcome to F45 Soho 💪 \nWe can't wait to see you soon! \nF45 Training is a global fitness community specializing in innovative, high-intensity group workouts that are fast, fun, and results-driven. \nThe F stands for Functional Training, a mix of Circuit and HIIT style workouts geared towards everyday movement and strength. 45 is the total amount of time for sweat-dripping, heart-pumping fun. \n- NEVER REPEAT A WORKOUT \n- 5,000+ FUNCTIONAL MOVEMENTS \n- UNBEATABLE COMMUNITY VIBES \n- NO MIRRORS, NO MICROPHONES, NO EGOS \n- TECHNOLOGY ENHANCED WORKOUTS \n- PREMIUM FACILITIES ✘",
+      "City": "London",
+      "Description": "We are a 3 minute walk from Piccadilly or Oxford Circus Underground Stations.",
+      "HasClasses": true,
+      "Id": 1,
+      "Latitude": 51.5136243,
+      "Longitude": -0.13716,
+      "Name": "F45 Training SOHO",
+      "Phone": "07544872551",
+      "PhoneExtension": null,
+      "PostalCode": "W1F 7SN",
+      "SiteID": 735836,
+      "StateProvCode": null,
+      "Tax1": 0.2,
+      "Tax2": 0.0,
+      "Tax3": 0.0,
+      "Tax4": 0.0,
+      "Tax5": 0.0,
+      "TotalNumberOfRatings": 36,
+      "AverageRating": 5.0,
+      "TotalNumberOfDeals": 1
+    },
+    {
+      "AdditionalImageURLs": ["https://s3-us-west-2.amazonaws.com/prod-api-lymberfitness/studios/default-studio-gallery-image-2x.jpg"],
+      "Address": "F45 Soho 14a Dufour's Place",
+      "Address2": "London W1F 7SN",
+      "Amenities": [],
+      "BusinessDescription": "Welcome to F45 Soho 💪 \nWe can't wait to see you soon! \nF45 Training is a global fitness community specializing in innovative, high-intensity group workouts that are fast, fun, and results-driven. \nThe F stands for Functional Training, a mix of Circuit and HIIT style workouts geared towards everyday movement and strength. 45 is the total amount of time for sweat-dripping, heart-pumping fun. \n- NEVER REPEAT A WORKOUT \n- 5,000+ FUNCTIONAL MOVEMENTS \n- UNBEATABLE COMMUNITY VIBES \n- NO MIRRORS, NO MICROPHONES, NO EGOS \n- TECHNOLOGY ENHANCED WORKOUTS \n- PREMIUM FACILITIES ✘",
+      "City": null,
+      "Description": null,
+      "HasClasses": false,
+      "Id": 98,
+      "Latitude": null,
+      "Longitude": null,
+      "Name": "Online Store",
+      "Phone": "07544872551",
+      "PhoneExtension": null,
+      "PostalCode": null,
+      "SiteID": 735836,
+      "StateProvCode": null,
+      "Tax1": 0.2,
+      "Tax2": 0.0,
+      "Tax3": 0.0,
+      "Tax4": 0.0,
+      "Tax5": 0.0,
+      "TotalNumberOfRatings": 0,
+      "AverageRating": 0.0,
+      "TotalNumberOfDeals": 0
+    }
+  ]
+}

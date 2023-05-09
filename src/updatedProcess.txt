@@ -1,0 +1,57 @@
+Logic --> createWriterFunction
+Logic --> generate dates
+Logic --> determine filter date for sales 
+API --> fetch AuthToken 
+API --> fetch clients #
+API --> fetch services #
+API --> fetch selected Sales  -> upperDate(3) to weekBegin #
+API --> fetch week classes #
+Logic --> get noncancelld class Ids
+API --> fectch class visits #
+Logic --> Filter for intro services and store the Ids
+Logic --> Filter clients for new week leads and store thier ids [weekLeadsIds]
+Logic  --> Get count of week leads trials
+Logic --> get percent of week leads to trials
+Logic --> Filter clients for new month leads and store thier ids [monthLeadsIds]
+Logic  --> Get count of month leads trials
+Logic --> get percent of month leads to trials
+Logic --> get ids of packs and classes services ids
+Logic --> get ids of leads and active clients as params
+API --> Fetch activeclientsmembership info with activeLeadsIds #
+Logic --> get mothlyBilled Leads Ids
+Logic --> get mothlyBilled Leads
+Logic --> get mothlyBilled Leads percent
+Logic --> get packs and upfront Leads
+Logic --> get packs and upfront Leads percent
+Logic --> get Leads purchased nothing
+Logic --> get trials purchased
+Logic --> get trials purchasers Ids
+API --> fetch trial purcahsers Visits #
+Logic --> {sort for trial purchasers visits} get trials purchasers with visits
+Logic --> get trials purchasers with visits ids
+Logic --> get trials purchasers with visits percent
+Logic --> get trials purchasers with visits to billed members
+Logic --> get trials purchasers with visits to billed members percent
+Logic --> get packs and upront month
+Logic -->  group membershipsids by groups and import (M)
+Logic --> create fnction to group clients by statuses
+Logic --> create fnction to group clients by membershipsid
+Logic --> exceute client grouping function and combined
+Logic -->  get total active billed and billed clients
+API --> get previous billed members, and termination values (X)
+Logic --> get billedMemberGrowth and Termination growth
+Logic --> get Attrition rate
+Logic --> get sales by category
+Logic --> get totalWeeklysales growth
+Logic --> get accountBalance
+Logic --> get average billing per member
+Logic --> get clients visits
+Logic --> get clients missed Visits
+Logic --> get clients unpaid visits
+
+Logic --> get previous week result data
+
+
+consider using activeclientsmembership instead of completeclient --? 20
+get select ids, group in object, store in file, upload to s3
+vet auto run with lambda

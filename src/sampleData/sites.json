@@ -1,0 +1,58 @@
+{
+  "PaginationResponse": {
+    "RequestedLimit": 100,
+    "RequestedOffset": 0,
+    "PageSize": 2,
+    "TotalResults": 2
+  },
+  "Sites": [
+    {
+      "AcceptsAmericanExpress": null,
+      "AcceptsDiscover": null,
+      "AcceptsMasterCard": null,
+      "AcceptsVisa": null,
+      "AllowsDashboardAccess": true,
+      "ContactEmail": null,
+      "Description": "\"The MINDBODY Health Club Demo is awesome.\"\r\n - Anonymous (but probably someone cool and smart)",
+      "Id": -99,
+      "LogoUrl": "https://clients-content.mindbodyonline.com/studios/demoapisandboxrestore/logo_mobile.png?osv=637604730740000000",
+      "Name": "API Sandbox Site",
+      "PageColor1": null,
+      "PageColor2": null,
+      "PageColor3": null,
+      "PageColor4": null,
+      "PricingLevel": "Legacy",
+      "SmsPackageEnabled": null,
+      "TaxInclusivePrices": false,
+      "CurrencyIsoCode": null,
+      "CountryCode": null,
+      "TimeZone": null,
+      "AcceptsDirectDebit": false,
+      "LeadChannels": []
+    },
+    {
+      "AcceptsAmericanExpress": null,
+      "AcceptsDiscover": null,
+      "AcceptsMasterCard": null,
+      "AcceptsVisa": null,
+      "AllowsDashboardAccess": true,
+      "ContactEmail": null,
+      "Description": "Welcome to F45 Soho 💪 \nWe can't wait to see you soon! \nF45 Training is a global fitness community specializing in innovative, high-intensity group workouts that are fast, fun, and results-driven. \nThe F stands for Functional Training, a mix of Circuit and HIIT style workouts geared towards everyday movement and strength. 45 is the total amount of time for sweat-dripping, heart-pumping fun. \n- NEVER REPEAT A WORKOUT \n- 5,000+ FUNCTIONAL MOVEMENTS \n- UNBEATABLE COMMUNITY VIBES \n- NO MIRRORS, NO MICROPHONES, NO EGOS \n- TECHNOLOGY ENHANCED WORKOUTS \n- PREMIUM FACILITIES ✘",
+      "Id": 735836,
+      "LogoUrl": "https://clients-content.mindbodyonline.com/studios/f45soho/logo_mobile.png?osv=637843267640000000",
+      "Name": "F45 Training SOHO",
+      "PageColor1": null,
+      "PageColor2": null,
+      "PageColor3": null,
+      "PageColor4": null,
+      "PricingLevel": "Accelerate",
+      "SmsPackageEnabled": null,
+      "TaxInclusivePrices": true,
+      "CurrencyIsoCode": null,
+      "CountryCode": null,
+      "TimeZone": null,
+      "AcceptsDirectDebit": false,
+      "LeadChannels": []
+    }
+  ]
+}
