@@ -559,15 +559,10 @@ const getWeekReport = async () => {
 
     let accountBalance = 0;
     const accountBalanceDebtorsIds = clientsData.reduce((accumulator, currentValue) => {
-      if (
-        currentValue?.AccountBalance &&
-        currentValue?.AccountBalance < 0 &&
-        currentValue?.Id !== "100005814" &&
-        currentValue?.Status !== "Non-Member" &&
-        currentValue?.Status !== "Declined" &&
-        currentValue?.Status !== "Terminated"
-      ) {
-        accountBalance += currentValue?.AccountBalance;
+      if (currentValue?.AccountBalance && currentValue?.AccountBalance < 0 && currentValue?.Id !== "100005814") {
+        if (currentValue?.Status !== "Non-Member" && currentValue?.Status !== "Terminated") {
+          accountBalance += currentValue?.AccountBalance;
+        }
         return [...accumulator, { clientId: currentValue?.Id, debt: currentValue?.AccountBalance, status: currentValue?.Status }];
       }
 
@@ -662,9 +657,6 @@ const getWeekReport = async () => {
     await putItem(data);
     console.log("ddb gotten");
 
-    console.log("dm", declinedMembersIds, declined);
-    console.log("sm", suspendedMembersIds, suspended);
-
     const organisedData = {
       weekLeads: {
         newLeadsForTheWeek: weekLeadsCount,
@@ -742,6 +734,9 @@ const getWeekReport = async () => {
       accountBalanceDebtorsIds,
       monthLeadsContracts,
       monthTrialPurcahsersWithFirstVisitIdsContracts,
+      missedVisitsArray,
+      unpaidVisitsArray,
+      leadsPurchasedIds,
     };
 
     await writeFiler("./src/checks/clients.json", clientsData);
