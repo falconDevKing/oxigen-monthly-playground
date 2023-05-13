@@ -1,6 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, GetCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 const { readFile } = require("fs").promises;
 
 const REGION = process.env.REGION;
@@ -86,5 +86,37 @@ export const createS3Files = async (fileName: string, filePath: string) => {
     console.log("UploadData", s3Data);
   } catch (err) {
     console.log("saving to s3 Error", err);
+  }
+};
+
+type getFileProps = {
+  fileName: string;
+};
+
+const streamToString = (stream: any) =>
+  new Promise((resolve, reject) => {
+    const chunks: any[] = [];
+    stream.on("data", (chunk: any) => chunks.push(chunk));
+    stream.on("error", reject);
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+  });
+
+export const getFile = async (props: getFileProps) => {
+  const bucketParams = {
+    Bucket: BUCKET,
+    Key: props.fileName,
+  };
+
+  try {
+    // Get the object from the Amazon S3 bucket. It is returned as a ReadableStream.
+    const data = await s3Client.send(new GetObjectCommand(bucketParams));
+    // Convert the ReadableStream to a string.
+    const dataString = (await data?.Body?.transformToString()) as string;
+    console.log("s3 data", data);
+    // convert stram to json
+    const result = JSON.parse(dataString);
+    return result;
+  } catch (err) {
+    console.log("Error geting", err);
   }
 };
