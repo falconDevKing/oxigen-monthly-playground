@@ -23,24 +23,18 @@ import fetchClasses from "./api/fetchClasses";
 import fetchServices from "./api/fetchServices";
 import fetchClassVisits from "./api/fetchClassVisits";
 import fetchClientVisits from "./api/fetchClientVisits";
-import fetchClientContracts from "./api/fetchClientContracts";
 import fetchCompleteClientInfo from "./api/fetchCompleteClientInfo";
 import fetchActiveClientMemberships from "./api/fetchActiveClientMemberships";
 import promiseAllSettledWrapper from "./helpers/promiseAllSettledFulfiller";
+// import fetchClientContracts from "./api/fetchClientContracts";
 
-// import clientsData from "./sampleData/clientData.json";
-// import services from "./sampleData/services.json";
-import tClients from "./sampleData/latestClientData.json";
-import tExtraData from "./sampleData/extraInfoClientDataMay1week.json";
-import tTransactions from "./sampleData/newtransactions.json";
-// import tServices from "./sampleData/services.json";
-// import tSales from "./sampleData/sales.json";
-// import tWeekClasses from "./sampleData/weekClasses.json";
-// import tWeekClassesVisits from "./sampleData/weekClassesVisit.json";
-// import tActiveLeadsClientsMemberships from "./sampleData/activeLeadsIdsMemberships.json";
-// import tMonthTrialsToVisits from "./sampleData/trialsVisitMth.json";
-import monthLeadsContracts from "./checks/monthLeadsContracts.json";
-import monthTrialPurcahsersWithFirstVisitIdsContracts from "./checks/monthTrialPurcahsersWithFirstVisitIdsContracts.json";
+import tClients from "./checks/clients.json";
+// import tClients from "./sampleData/latestClientData.json";
+import tExtraData from "./checks/extraData.json";
+// import tExtraData from "./sampleData/extraInfoClientDataMay1week.json";
+// import tTransactions from "./sampleData/newtransactions.json";
+// import monthLeadsContracts from "./checks/monthLeadsContracts.json";
+// import monthTrialPurcahsersWithFirstVisitIdsContracts from "./checks/monthTrialPurcahsersWithFirstVisitIdsContracts.json";
 
 const {
   services: tServices,
@@ -56,12 +50,9 @@ const {
   monthTrialPurcahsersWithFirstVisitIds: tMonthTrialPurcahsersWithFirstVisitIds,
   monthTrialPurcahsersWithVisitToBilledIds: tMonthTrialPurcahsersWithVisitToBilledIds,
   accountBalanceDebtorsIds: tAccountBalanceDebtorsIds,
+  monthLeadsCompleteClients: tMonthLeadsCompleteClients,
+  monthTrialPurcahsersWithFirstVisitIdsCompleteClients: tMonthTrialPurcahsersWithFirstVisitIdsCompleteClients,
 } = tExtraData;
-
-// import completeClientsInfo from "./sampleData/completeClient.json";
-// import monthTrialsToVisits from "./sampleData/trialsVisitMth.json";
-// import activeLeadsVisits from "./sampleData/activeLeadsVisits.json";
-// import activeLeadsUnpaidVisits from "./sampleData/activeLeadsUnpaidVisits.json";
 
 import visit from "./types/visit";
 import classes from "./types/classes";
@@ -79,6 +70,9 @@ const writeFiler = async (path: string, data: any) => {
   await fs.writeFile(path, JSON.stringify(data));
   console.log(path, " written");
 };
+
+//create date modifier
+const modifyDate = (date: string) => (date.includes("Z") ? date : date + "Z");
 
 //generate dates -> 2
 const formatString = "YYYY-MM-DDTHH:mm:ss[Z]";
@@ -103,27 +97,22 @@ const getWeekReport = async () => {
   try {
     ////get bearer token --> 4
     const authToken = await getBearerToken();
-    // const authToken = "auth";
     console.log("token gotten");
 
     ////Fetch all clients -> 5
-    // const clientsData: clientType[] = await fetchClients(authToken);
-    const clientsData = tClients as clientType[];
+    const clientsData: clientType[] = await fetchClients(authToken);
     console.log("clients gotten");
 
     //Fetch all services -> 6
-    // const services: services[] = await fetchServices(authToken);
-    const services = tServices as services[];
+    const services: services[] = await fetchServices(authToken);
     console.log("services gotten");
 
     //Fetch all sales -> 7 -> upperDate,weekBegin
-    // const sales: salesType[] = await fetchSales(authToken, upperSalesDate, weekBegin)
-    const sales = tSales as salesType[];
+    const sales: salesType[] = await fetchSales(authToken, upperSalesDate, weekBegin);
     console.log("sales gotten");
 
     //fecth week classes --> 8
-    // const weekClasses: classes[] = await fetchClasses(authToken, previousWeekBegin, weekBegin);
-    const weekClasses = tWeekClasses as unknown as classes[];
+    const weekClasses: classes[] = await fetchClasses(authToken, previousWeekBegin, weekBegin);
     console.log("weekClass gotten", weekClasses.length);
     // get noncancelld class Ids --> 9
     const nonCancelledClassesIds = weekClasses.reduce((accumulator, currentValue) => {
@@ -134,16 +123,16 @@ const getWeekReport = async () => {
     }, [] as { authToken: string; classId: number }[]);
 
     // fectch class visits --> 10
-    // const weekClassesVisitsArray: visitType[][] = await promiseAllSettledWrapper(nonCancelledClassesIds, fetchClassVisits, 2);
-    // const weekClassesVisits = weekClassesVisitsArray.flat();
-    const weekClassesVisits = tWeekClassesVisits as unknown as visit[];
+    const weekClassesVisitsArray: visitType[][] = await promiseAllSettledWrapper(nonCancelledClassesIds, fetchClassVisits, 2);
+    const weekClassesVisits = weekClassesVisitsArray.flat();
     console.log("weekClassVisits gotten", weekClassesVisits.length);
 
     //filter for leads and active clients ids -> 19
     const activeLeadsIds = clientsData.reduce((accumulator, currentValue) => {
+      const modFilterDate = modifyDate(currentValue?.CreationDate);
       if (
         currentValue.Status === "Active" ||
-        (moment(currentValue?.CreationDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(currentValue?.CreationDate, "hour"))
+        (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour"))
       ) {
         return [...accumulator, currentValue.Id];
       } else {
@@ -169,9 +158,8 @@ const getWeekReport = async () => {
 
     groupIds();
 
-    // const activeLeadsClientsMembershipsArray: activeClientsMemberships[][] = await promiseAllSettledWrapper(groupedIds, fetchActiveClientMemberships, 3);
-    // const activeLeadsClientsMemberships = activeLeadsClientsMembershipsArray.flat();
-    const activeLeadsClientsMemberships = tActiveLeadsClientsMemberships as unknown as activeClientsMemberships[];
+    const activeLeadsClientsMembershipsArray: activeClientsMemberships[][] = await promiseAllSettledWrapper(groupedIds, fetchActiveClientMemberships, 2);
+    const activeLeadsClientsMemberships = activeLeadsClientsMembershipsArray.flat();
     console.log("activeclients gotten", activeLeadsClientsMemberships.length);
 
     //Filter services for intro  offers ids -> 11
@@ -193,8 +181,8 @@ const getWeekReport = async () => {
     //Filter clients for new weeks leads count and store thier ids [weekLeadsIds] -> 12,C
     let weekLeadsCount = 0;
     const weekLeadsIds = clientsData?.reduce((accumulator, currentValue) => {
-      const weekLead =
-        moment(currentValue?.CreationDate).isSameOrAfter(previousWeekBegin, "hour") && moment(weekBegin).isAfter(currentValue?.CreationDate, "hour");
+      const modFilterDate = modifyDate(currentValue?.CreationDate);
+      const weekLead = moment(modFilterDate).isSameOrAfter(previousWeekBegin, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
 
       if (weekLead) {
         weekLeadsCount += 1;
@@ -235,7 +223,8 @@ const getWeekReport = async () => {
     //GET NEW LEADS FOR THE MONTHS count and store thier ids [weekLeadsIds] ---> 15,F
     let monthLeadsCount = 0;
     const monthLeadsIds: string[] = clientsData?.reduce((accumulator, client) => {
-      const monthLead = moment(client?.CreationDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(client?.CreationDate, "hour");
+      const modFilterDate = modifyDate(client?.CreationDate);
+      const monthLead = moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
       if (monthLead) {
         monthLeadsCount += 1;
         return [...accumulator, client.Id];
@@ -248,12 +237,14 @@ const getWeekReport = async () => {
     const monthLeadsTrialsCount = monthLeadsIds.reduce((accumulator, currentVal) => {
       const leadPurchasedItems = sales
         .reduce((acc, curr) => {
+          const modFilterDate = modifyDate(curr.SaleDateTime);
           if (
             curr.ClientId === currentVal &&
-            moment(curr.SaleDateTime).isSameOrAfter(upperFilterDate, "hour") &&
-            moment(weekBegin).isAfter(curr.SaleDateTime, "hour")
+            moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") &&
+            moment(weekBegin).isAfter(modFilterDate, "hour")
           ) {
-            return [...acc, curr.PurchasedItems];
+            const soldPurchasedItems = curr.PurchasedItems.filter((purchaseItem, index) => curr.Payments[index]?.TransactionId);
+            return [...acc, soldPurchasedItems];
           }
           return acc;
         }, [] as PurchasedItems[][])
@@ -281,7 +272,6 @@ const getWeekReport = async () => {
       endDate: weekBegin,
     }));
     const monthLeadsCompleteClients: completeClientInfo[] = await promiseAllSettledWrapper(monthLeadsCompleteClientsParams, fetchCompleteClientInfo, 2);
-    await writeFiler("./src/checks/monthLeadsCompleteClients.json", monthLeadsCompleteClients);
     console.log("monthLeadsContracts gotten");
 
     let monthBilledLeads = 0;
@@ -301,21 +291,23 @@ const getWeekReport = async () => {
     const monthPacksUpfrontLeadsIds = monthLeadsIds.reduce((accumulator, currentVal) => {
       const leadPurchasedItems = sales
         .reduce((acc, curr) => {
+          const modFilterDate = modifyDate(curr.SaleDateTime);
           if (
             curr.ClientId === currentVal &&
-            moment(curr.SaleDateTime).isSameOrAfter(upperFilterDate, "hour") &&
-            moment(weekBegin).isAfter(curr.SaleDateTime, "hour")
+            moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") &&
+            moment(weekBegin).isAfter(modFilterDate, "hour")
           ) {
-            return [...acc, curr.PurchasedItems];
+            const soldPurchasedItems = curr.PurchasedItems.filter((purchaseItem, index) => curr.Payments[index]?.TransactionId);
+            return [...acc, soldPurchasedItems];
           }
           return acc;
         }, [] as PurchasedItems[][])
         .flat();
 
-      const leadSaleItemsTrial = leadPurchasedItems.map((leadPurchasedItem) => packsUpfrontIds.includes(leadPurchasedItem.Id));
-      const leadTrial = leadSaleItemsTrial.includes(true);
+      const leadSaleItemsPacksUpfront = leadPurchasedItems.map((leadPurchasedItem) => packsUpfrontIds.includes(leadPurchasedItem.Id));
+      const leadPacksUpfront = leadSaleItemsPacksUpfront.includes(true);
 
-      if (leadTrial) {
+      if (leadPacksUpfront) {
         monthPacksUpfrontLeads += 1;
         return [...accumulator, currentVal];
       } else {
@@ -341,9 +333,11 @@ const getWeekReport = async () => {
     let monthTrialsPurchased = 0;
     const monthTrialsPurchasersIds = sales
       .reduce((accumulator, currentValue) => {
-        if (moment(currentValue.SaleDateTime).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(currentValue.SaleDateTime, "hour")) {
-          const purchasedItems = currentValue.PurchasedItems;
-          const modifiedPurchasedItems: modifiedPurchasedItems[] = purchasedItems.map((purchasedItem) => ({
+        const modFilterDate = modifyDate(currentValue.SaleDateTime);
+        if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+          // const purchasedItems = currentValue.PurchasedItems;
+          const soldPurchasedItems = currentValue.PurchasedItems.filter((purchaseItem, index) => currentValue.Payments[index]?.TransactionId);
+          const modifiedPurchasedItems: modifiedPurchasedItems[] = soldPurchasedItems.map((purchasedItem) => ({
             ...purchasedItem,
             clientId: currentValue.ClientId,
           }));
@@ -367,23 +361,25 @@ const getWeekReport = async () => {
     const monthTrialsPurchasersIdsParams = monthTrialsPurchasersIds.reduce((accumulator, currentValue) => {
       return [...accumulator, { clientId: currentValue, authToken, startDate: upperFilterDate, endDate: weekBegin }];
     }, [] as activeLeadsClientInfoParams[]);
-    // const monthTrialsToVisits: visit[][] = await promiseAllSettledWrapper(monthTrialsPurchasersIdsParams, fetchClientVisits, 2);
-    const monthTrialsToVisits = tMonthTrialsToVisits as visit[][];
+    const monthTrialsToVisits: visit[][] = await promiseAllSettledWrapper(monthTrialsPurchasersIdsParams, fetchClientVisits, 2);
     console.log("month trial to visits gotten", monthTrialsToVisits.length);
 
     // get trials first visits for month ---> 30,O
     // get trials first visits for month Ids ---> 31
     let monthTrialsToFirstVisited = 0;
     const monthTrialPurcahsersWithFirstVisitIds = monthTrialsPurchasersIds.reduce((accum, curVal) => {
-      const clientData = (tClients as clientType[]).find((client) => client.Id === curVal);
+      const clientData = clientsData.find((client) => client.Id === curVal);
 
       if (!clientData) {
         return accum;
       }
 
-      if (moment(clientData?.FirstClassDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(clientData?.FirstClassDate, "hour")) {
-        monthTrialsToFirstVisited += 1;
-        return [...accum, clientData?.Id];
+      if (clientData?.FirstClassDate) {
+        const modFilterDate = modifyDate(clientData?.FirstClassDate);
+        if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+          monthTrialsToFirstVisited += 1;
+          return [...accum, clientData?.Id];
+        }
       }
 
       return accum;
@@ -405,7 +401,6 @@ const getWeekReport = async () => {
       fetchCompleteClientInfo,
       2
     );
-    await writeFiler("./src/checks/monthTrialPurcahsersWithFirstVisitIdsCompleteClients.json", monthTrialPurcahsersWithFirstVisitIdsCompleteClients);
     console.log("monthTrialPurcahsersWithFirstVisitIdsCompleteClients gotten");
 
     let monthTrialPurcahsersWithVisitToBilled = 0;
@@ -424,12 +419,15 @@ const getWeekReport = async () => {
     let monthPacksUpfront = 0;
     const monthPacksUpfrontIds = sales
       .reduce((accumulator, currentValue) => {
-        if (moment(currentValue.SaleDateTime).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(currentValue.SaleDateTime, "hour")) {
+        const modFilterDate = modifyDate(currentValue.SaleDateTime);
+        if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
           const modifiedPurchasedItems: modifiedPurchasedItems[] = currentValue.PurchasedItems.map((purchasedItem) => ({
             ...purchasedItem,
             clientId: currentValue.ClientId,
           }));
-          return [...accumulator, ...modifiedPurchasedItems];
+
+          const soldPurchasedItems = modifiedPurchasedItems.filter((purchaseItem, index) => currentValue.Payments[index]?.TransactionId);
+          return [...accumulator, ...soldPurchasedItems];
         } else {
           return accumulator;
         }
@@ -487,7 +485,7 @@ const getWeekReport = async () => {
     };
 
     // create grouped clients by memberships ---> 38
-    const getMembershipFigures = (clientsData: string[]) => {
+    const getMembershipFigures = (clientsMembershipData: string[]) => {
       let unlimited = 0;
       let limited = 0;
       let challenge = 0;
@@ -496,7 +494,8 @@ const getWeekReport = async () => {
       let classPass = 0;
       let inActive = 0;
 
-      clientsData.forEach((clientId) => {
+      clientsMembershipData.forEach((clientId) => {
+        //is it necessary to find since the data was generated from the finding id
         const membershipsIds = activeLeadsClientsMemberships
           .find((activeLeadsClientsMembership) => activeLeadsClientsMembership?.ClientId === clientId)
           ?.Memberships?.map((membership) => membership.MembershipId);
@@ -543,11 +542,12 @@ const getWeekReport = async () => {
     // get week sales and sales by category ---> 44, AG, AH
     let totalWeeklyBilledIncome = 0;
     let totalWeeklyIncome = 0;
-    (sales as any[])?.forEach((sale: any) => {
-      const considerableSale = moment(sale.SaleDateTime).isSameOrAfter(previousWeekBegin, "hour") && moment(weekBegin).isAfter(sale.SaleDateTime, "hour");
+    (sales as salesType[])?.forEach((sale) => {
+      const modFilterDate = modifyDate(sale.SaleDateTime);
+      const considerableSale = moment(modFilterDate).isSameOrAfter(previousWeekBegin, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
       if (considerableSale) {
-        const purchasedItems = sale.PurchasedItems.forEach((purchasedItem: any) => {
-          if (sale.Payments[0].TransactionId) {
+        sale.PurchasedItems.forEach((purchasedItem, index) => {
+          if (sale.Payments[index].TransactionId) {
             totalWeeklyIncome = totalWeeklyIncome + purchasedItem.TotalAmount;
             if (purchasedItem.ContractId) {
               totalWeeklyBilledIncome = totalWeeklyBilledIncome + purchasedItem.TotalAmount;
@@ -579,8 +579,9 @@ const getWeekReport = async () => {
     let unpaidVisits = 0;
     let missedVisitsArray: string[] = [];
     let unpaidVisitsArray: string[] = [];
-    const attendance = tWeekClassesVisits.reduce((accumulator, currentValue) => {
-      if (moment(currentValue.StartDateTime).isAfter(previousWeekBegin)) {
+    const attendance = weekClassesVisits.reduce((accumulator, currentValue) => {
+      const modFilterDate = modifyDate(currentValue.StartDateTime);
+      if (moment(modFilterDate).isSameOrAfter(previousWeekBegin)) {
         if (currentValue.Missed) {
           missedVisits += 1;
           missedVisitsArray = [...missedVisitsArray, currentValue.ClientId];
@@ -597,7 +598,13 @@ const getWeekReport = async () => {
 
     //get previous total billed members, terminations and totalWeeklySales  -> 41
     const previousWeekResults = await queryTable(previousReportDate);
-    const previousWeekResult = (previousWeekResults as any[])[0];
+    const sortedweekResults = previousWeekResults?.sort((a, b) => {
+      const aDate = moment(a?.updatedAt);
+      const bDate = moment(b?.updatedAt);
+
+      return aDate === bDate ? 0 : aDate > bDate ? -1 : 1;
+    });
+    const previousWeekResult = (sortedweekResults as any[])[0];
     console.log("PWR", previousWeekResult);
 
     const { limited, unlimited, challenge, complimentary, paidInFull, classPass, suspended, declined, terminated, ...rest } = membershipValues;
@@ -635,9 +642,9 @@ const getWeekReport = async () => {
       classPasses: classPass,
       Suspended: suspended,
       declined: declined,
-      billedMemberGrowth: totalBilled - previousWeekResult.totalBilled,
-      weeklyCancellations: terminated - previousWeekResult.terminated,
-      attritionRate: Number(((terminated - previousWeekResult.terminated) * 100) / totalBilled).toFixed(2),
+      billedMemberGrowth: totalBilled - previousWeekResult?.totalBilled,
+      weeklyCancellations: terminated - previousWeekResult?.terminated,
+      attritionRate: Number(((terminated - previousWeekResult?.terminated) * 100) / totalBilled).toFixed(2),
       totalWeeklyBilledIncome,
       totalWeeklyIncome,
       weeklyIncomeGrowth: totalWeeklyIncome - previousWeekResult.totalWeeklyIncome,
@@ -654,7 +661,7 @@ const getWeekReport = async () => {
 
     console.log(data);
 
-    await putItem(data);
+    // await putItem(data);
     console.log("ddb gotten");
 
     const organisedData = {
@@ -732,11 +739,11 @@ const getWeekReport = async () => {
       monthTrialPurcahsersWithVisitToBilledIds,
       monthPacksUpfrontIds,
       accountBalanceDebtorsIds,
-      monthLeadsContracts,
-      monthTrialPurcahsersWithFirstVisitIdsContracts,
       missedVisitsArray,
       unpaidVisitsArray,
       leadsPurchasedIds,
+      monthLeadsCompleteClients,
+      monthTrialPurcahsersWithFirstVisitIdsCompleteClients,
     };
 
     await writeFiler("./src/checks/clients.json", clientsData);
@@ -753,23 +760,260 @@ const getWeekReport = async () => {
 };
 
 const tester = () => {
-  let accountBalance = 0;
-  const accountBalanceDebtorsIds = (tClients as clientType[]).reduce((accumulator, currentValue) => {
-    if (
-      currentValue?.AccountBalance &&
-      currentValue?.AccountBalance < 0 &&
-      currentValue?.Id !== "100005814" &&
-      currentValue?.Status !== "Non-Member" &&
-      currentValue?.Status !== "Terminated"
-    ) {
-      accountBalance += currentValue?.AccountBalance;
-      return [...accumulator, { clientId: currentValue?.Id, debt: currentValue?.AccountBalance, status: currentValue?.Status }];
+  const authToken = "";
+  const introServicesIds = (tServices as services[])?.reduce((accumulator, currentValue) => {
+    if (currentValue.IsIntroOffer) {
+      return [...accumulator, currentValue.ProductId];
+    }
+    return accumulator;
+  }, [] as number[]);
+
+  //get packs and upfront services id -> 18
+  const packsUpfrontIds = (tServices as any[])?.reduce((accumulator, currentValue) => {
+    if (currentValue.MembershipId === 4434 || currentValue.MembershipId === 4435) {
+      return [...accumulator, currentValue.ProductId];
+    }
+    return accumulator;
+  }, []);
+
+  let weekLeadsCount = 0;
+  const weekLeadsIds = (tClients as clientType[])?.reduce((accumulator, currentValue) => {
+    const modFilterDate = modifyDate(currentValue?.CreationDate);
+    const weekLead = moment(modFilterDate).isSameOrAfter(previousWeekBegin, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
+
+    if (weekLead) {
+      weekLeadsCount += 1;
+      return [...accumulator, currentValue.Id];
+    } else {
+      return accumulator;
+    }
+  }, [] as string[]);
+
+  //get week trials ---> 13,D
+  const weekLeadsTrialsCount = weekLeadsIds.reduce((accumulator, currentVal) => {
+    const leadPurchasedItems = (tSales as salesType[])
+      .reduce((acc, curr) => {
+        if (
+          curr.ClientId === currentVal &&
+          moment(curr.SaleDateTime).isSameOrAfter(previousWeekBegin, "hour") &&
+          moment(weekBegin).isAfter(curr.SaleDateTime, "hour")
+        ) {
+          // console.log(curr.ClientId, curr.Id);
+          return [...acc, curr.PurchasedItems];
+        }
+        return acc;
+      }, [] as PurchasedItems[][])
+      .flat();
+
+    const leadSaleItemsTrial = leadPurchasedItems.map((leadPurchasedItem) => introServicesIds.includes(leadPurchasedItem.Id));
+    const leadTrial = leadSaleItemsTrial.includes(true);
+
+    if (leadTrial) {
+      return accumulator + 1;
+    } else {
+      return accumulator;
+    }
+  }, 0);
+
+  let monthLeadsCount = 0;
+  const monthLeadsIds: string[] = (tClients as clientType[])?.reduce((accumulator, client) => {
+    const modFilterDate = modifyDate(client?.CreationDate);
+    const monthLead = moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
+    if (monthLead) {
+      monthLeadsCount += 1;
+      return [...accumulator, client.Id];
+    } else {
+      return accumulator;
+    }
+  }, [] as string[]);
+
+  console.log("MONTH COMING");
+  console.log("MONTH COMING");
+
+  //get month trials alt ---> 16,G
+  const monthLeadsTrialsCount = monthLeadsIds.reduce((accumulator, currentVal) => {
+    const leadPurchasedItems = (tSales as salesType[])
+      .reduce((acc, curr) => {
+        const modFilterDate = modifyDate(curr.SaleDateTime);
+        if (curr.ClientId === currentVal && moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+          const soldPurchasedItems = curr.PurchasedItems.filter((purchaseItem, index) => curr.Payments[index]?.TransactionId);
+          // return [...acc, soldPurchasedItems];
+          // console.log(curr.ClientId, curr.Id);
+          return [...acc, curr.PurchasedItems];
+        }
+        return acc;
+      }, [] as PurchasedItems[][])
+      .flat();
+
+    const leadSaleItemsTrial = leadPurchasedItems.map((leadPurchasedItem) => introServicesIds.includes(leadPurchasedItem.Id));
+    const leadTrial = leadSaleItemsTrial.includes(true);
+
+    if (leadTrial) {
+      return accumulator + 1;
+    } else {
+      return accumulator;
+    }
+  }, 0);
+
+  //get packs and upfront leads --> 24,K
+  let monthPacksUpfrontLeads = 0;
+  const monthPacksUpfrontLeadsIds = monthLeadsIds.reduce((accumulator, currentVal) => {
+    const leadPurchasedItems = (tSales as salesType[])
+      .reduce((acc, curr) => {
+        const modFilterDate = modifyDate(curr.SaleDateTime);
+        if (curr.ClientId === currentVal && moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+          const soldPurchasedItems = curr.PurchasedItems.filter((purchaseItem, index) => curr.Payments[index]?.TransactionId);
+          // return [...acc, soldPurchasedItems];
+          return [...acc, curr.PurchasedItems];
+        }
+        return acc;
+      }, [] as PurchasedItems[][])
+      .flat();
+
+    const leadSaleItemsPacksUpfront = leadPurchasedItems.map((leadPurchasedItem) => packsUpfrontIds.includes(leadPurchasedItem.Id));
+    const leadPacksUpfront = leadSaleItemsPacksUpfront.includes(true);
+
+    if (leadPacksUpfront) {
+      monthPacksUpfrontLeads += 1;
+      return [...accumulator, currentVal];
+    } else {
+      return accumulator;
+    }
+  }, [] as string[]);
+
+  //get packs and upfront leads percent--> 25,L
+  const percentMonthPacksUpfrontLeads = Number((monthPacksUpfrontLeads / monthLeadsCount) * 100).toFixed(2);
+
+  const monthBilledLeadsIds: string[] = [];
+
+  ///get leads purchased nothing --> 26,M
+  const leadsPurchasedIds = Array.from(new Set([...(tSales as salesType[]).map((sale) => sale.ClientId), ...tMonthBilledLeadsIds]));
+  const leadPurchasedNothing = monthLeadsIds.reduce((accumulator, currentValue) => {
+    if (!leadsPurchasedIds.includes(currentValue)) {
+      return accumulator + 1;
+    } else {
+      return accumulator;
+    }
+  }, 0);
+
+  //get trials purchased --> 27, N
+  //get trials purchasers ids --> 28
+  let monthTrialsPurchased = 0;
+  const monthTrialsPurchasersIds = (tSales as salesType[])
+    .reduce((accumulator, currentValue) => {
+      const modFilterDate = modifyDate(currentValue.SaleDateTime);
+      if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+        // const purchasedItems = currentValue.PurchasedItems;
+        const soldPurchasedItems = currentValue.PurchasedItems.filter((purchaseItem, index) => currentValue.Payments[index]?.TransactionId);
+        const modifiedPurchasedItems: modifiedPurchasedItems[] = currentValue.PurchasedItems.map((purchasedItem) => ({
+          ...purchasedItem,
+          clientId: currentValue.ClientId,
+        }));
+
+        return [...accumulator, ...modifiedPurchasedItems];
+      } else {
+        return accumulator;
+      }
+    }, [] as modifiedPurchasedItems[])
+    .flat()
+    .reduce((accum, curVal) => {
+      if (introServicesIds.includes(curVal.Id)) {
+        monthTrialsPurchased += 1;
+        return [...accum, curVal.clientId];
+      } else {
+        return accum;
+      }
+    }, [] as string[]);
+
+  //fetch trial purcahsers Visits --> 29
+  // const monthTrialsPurchasersIdsParams = monthTrialsPurchasersIds.reduce((accumulator, currentValue) => {
+  //   return [...accumulator, { clientId: currentValue, authToken, startDate: upperFilterDate, endDate: weekBegin }];
+  // }, [] as activeLeadsClientInfoParams[]);
+  // const monthTrialsToVisits: visit[][] = await promiseAllSettledWrapper(monthTrialsPurchasersIdsParams, fetchClientVisits, 2);
+  // console.log("month trial to visits gotten", monthTrialsToVisits.length);
+
+  // get trials first visits for month ---> 30,O
+  // get trials first visits for month Ids ---> 31
+  let monthTrialsToFirstVisited = 0;
+  const monthTrialPurcahsersWithFirstVisitIds = monthTrialsPurchasersIds.reduce((accum, curVal) => {
+    const clientData = (tClients as clientType[]).find((client) => client.Id === curVal);
+
+    if (!clientData) {
+      return accum;
     }
 
-    return accumulator;
-  }, [] as { clientId: string; debt: number; status: string }[]);
+    if (clientData?.FirstClassDate) {
+      const modFilterDate = modifyDate(clientData?.FirstClassDate);
+      if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+        monthTrialsToFirstVisited += 1;
+        return [...accum, clientData?.Id];
+      }
+    }
 
-  console.log(accountBalance);
+    return accum;
+  }, [] as string[]);
+
+  // get trials first visits percent ---> 32,P
+  const percentMonthTDTrialsToVisit = Number((monthTrialsToFirstVisited / monthTrialsPurchased) * 100).toFixed(2);
+
+  // get trials purchasers with visits to billed members -> 33, Q
+
+  // const monthTrialPurcahsersWithFirstVisitIdsParams = monthTrialPurcahsersWithFirstVisitIds.map((monthTrialPurcahsersWithFirstVisitId) => ({
+  //   authToken,
+  //   clientId: monthTrialPurcahsersWithFirstVisitId,
+  //   startDate: previousWeekBegin,
+  //   endDate: weekBegin,
+  // }));
+  // const monthTrialPurcahsersWithFirstVisitIdsCompleteClients: completeClientInfo[] = await promiseAllSettledWrapper(
+  //   monthTrialPurcahsersWithFirstVisitIdsParams,
+  //   fetchCompleteClientInfo,
+  //   2
+  // );
+  // console.log("monthTrialPurcahsersWithFirstVisitIdsCompleteClients gotten");
+
+  // let monthTrialPurcahsersWithVisitToBilled = 0;
+  // const monthTrialPurcahsersWithVisitToBilledIds = monthTrialPurcahsersWithFirstVisitIdsCompleteClients.reduce((accumulator, currentValue) => {
+  //   if (currentValue.ClientContracts.length) {
+  //     monthTrialPurcahsersWithVisitToBilled += 1;
+  //     return [...accumulator, currentValue.Client.Id];
+  //   }
+  //   return accumulator;
+  // }, [] as string[]);
+
+  // // get trials purchasers with visits to billed members percent -> 34, R
+  // const percentMonthTDTrialsWithVisitToBilled = Number((monthTrialPurcahsersWithVisitToBilled / monthTrialsPurchased) * 100).toFixed(2);
+
+  // get packs and upfront for month ---> 35,S
+  let monthPacksUpfront = 0;
+  const monthPacksUpfrontIds = (tSales as salesType[])
+    .reduce((accumulator, currentValue) => {
+      const modFilterDate = modifyDate(currentValue.SaleDateTime);
+      if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+        const modifiedPurchasedItems: modifiedPurchasedItems[] = currentValue.PurchasedItems.map((purchasedItem) => ({
+          ...purchasedItem,
+          clientId: currentValue.ClientId,
+        }));
+
+        const soldPurchasedItems = modifiedPurchasedItems.filter((purchaseItem, index) => currentValue.Payments[index]?.TransactionId);
+        // return [...accumulator, ...soldPurchasedItems];
+        return [...accumulator, ...modifiedPurchasedItems];
+      } else {
+        return accumulator;
+      }
+    }, [] as modifiedPurchasedItems[])
+    .flat()
+    .reduce((accum, curVal) => {
+      if (packsUpfrontIds.includes(curVal.Id)) {
+        monthPacksUpfront += 1;
+        return [...accum, curVal.clientId];
+      } else {
+        return accum;
+      }
+    }, [] as string[]);
+
+  console.log(weekLeadsCount, weekLeadsTrialsCount);
+  console.log(monthLeadsCount, monthLeadsTrialsCount);
+  console.log(monthPacksUpfrontLeads, monthTrialsPurchased, monthPacksUpfront, leadPurchasedNothing);
 };
 
 tester();
