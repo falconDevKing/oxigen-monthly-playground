@@ -22,28 +22,28 @@ type PricingRelationships = {
 };
 
 export type Program = {
-  Id: number;
-  Name: string;
-  ScheduleType: ScheduleType;
-  CancelOffset: number;
-  ContentFormats: string[];
-  PricingRelationships: PricingRelationships;
+  Id: number | null;
+  Name: string | null;
+  ScheduleType: ScheduleType | string | null;
+  CancelOffset: number | null;
+  ContentFormats: string[] | null;
+  PricingRelationships: PricingRelationships | null;
 };
 
 export type clientService = {
-  ActiveDate: string;
-  Count: number;
-  Current: boolean;
-  ExpirationDate: string;
-  Id: number;
-  ProductId: number;
-  Name: string;
-  PaymentDate: string;
-  Program: Program;
-  Remaining: number;
-  SiteId: number;
-  Action: Action1;
-  ClientID: string;
+  ActiveDate: string | null;
+  Count: number | null;
+  Current: boolean | null;
+  ExpirationDate: string | null;
+  Id: number | null;
+  ProductId: number | null;
+  Name: string | null;
+  PaymentDate: string | null;
+  Program: Program | null;
+  Remaining: number | null;
+  SiteId: number | null;
+  Action: Action1 | string | null;
+  ClientID: string | null;
 };
 
 type services = {

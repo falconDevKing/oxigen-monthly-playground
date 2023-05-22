@@ -89,10 +89,6 @@ export const createS3Files = async (fileName: string, filePath: string) => {
   }
 };
 
-type getFileProps = {
-  fileName: string;
-};
-
 const streamToString = (stream: any) =>
   new Promise((resolve, reject) => {
     const chunks: any[] = [];
@@ -101,10 +97,10 @@ const streamToString = (stream: any) =>
     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
   });
 
-export const getFile = async (props: getFileProps) => {
+export const getFile = async (fileName: string) => {
   const bucketParams = {
     Bucket: BUCKET,
-    Key: props.fileName,
+    Key: fileName,
   };
 
   try {

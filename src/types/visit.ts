@@ -21,32 +21,32 @@ enum AppointmentStatus {
 }
 
 type visitType = {
-  AppointmentId: number;
-  AppointmentGenderPreference: string;
-  AppointmentStatus: string;
-  ClassId: number;
-  ClientId: string;
-  ClientUniqueId: number;
-  StartDateTime: string;
-  EndDateTime: string;
-  Id: number;
-  LastModifiedDateTime: string;
-  LateCancelled: boolean;
-  SiteId: number;
-  LocationId: number;
-  MakeUp: boolean;
-  Name: string;
-  ServiceId: number;
-  ServiceName: string;
-  ProductId: number;
-  SignedIn: boolean;
-  StaffId: number;
-  WebSignup: boolean;
-  Action: string;
-  Missed: boolean;
-  VisitType: number;
-  TypeGroup: number;
-  TypeTaken: string;
+  AppointmentId: number | null;
+  AppointmentGenderPreference: string | null;
+  AppointmentStatus: string | null;
+  ClassId: number | null;
+  ClientId: string | null;
+  ClientUniqueId: number | null;
+  StartDateTime: string | null;
+  EndDateTime: string | null;
+  Id: number | null;
+  LastModifiedDateTime: string | null;
+  LateCancelled: boolean | null;
+  SiteId: number | null;
+  LocationId: number | null;
+  MakeUp: boolean | null;
+  Name: string | null;
+  ServiceId: number | null;
+  ServiceName: string | null;
+  ProductId: number | null;
+  SignedIn: boolean | null;
+  StaffId: number | null;
+  WebSignup: boolean | null;
+  Action: string | null;
+  Missed: boolean | null;
+  VisitType: number | null;
+  TypeGroup: number | null;
+  TypeTaken: string | null;
 };
 
 export default visitType;

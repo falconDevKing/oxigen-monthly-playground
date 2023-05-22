@@ -6,31 +6,31 @@ type Amenities = {
 };
 
 export type Location = {
-  AdditionalImageURLs: [];
-  Address: string;
-  Address2: string;
-  Amenities: Amenities[];
-  BusinessDescription: string;
-  City: string;
-  Description: string;
-  HasClasses: boolean;
-  Id: number;
-  Latitude: number;
-  Longitude: number;
-  Name: string;
-  Phone: string;
-  PhoneExtension: string;
-  PostalCode: string;
-  SiteID: number;
-  StateProvCode: string;
-  Tax1: number;
-  Tax2: number;
-  Tax3: number;
-  Tax4: number;
-  Tax5: number;
-  TotalNumberOfRatings: number;
-  AverageRating: number;
-  TotalNumberOfDeals: number;
+  AdditionalImageURLs: string[] | null;
+  Address: string | null;
+  Address2: string | null;
+  Amenities: Amenities[] | null;
+  BusinessDescription: string | null;
+  City: string | null;
+  Description: string | null;
+  HasClasses: boolean | null;
+  Id: number | null;
+  Latitude: number | null;
+  Longitude: number | null;
+  Name: string | null;
+  Phone: string | null;
+  PhoneExtension: string | null;
+  PostalCode: string | null;
+  SiteID: number | null;
+  StateProvCode: string | null;
+  Tax1: number | null;
+  Tax2: number | null;
+  Tax3: number | null;
+  Tax4: number | null;
+  Tax5: number | null;
+  TotalNumberOfRatings: number | null;
+  AverageRating: number | null;
+  TotalNumberOfDeals: number | null;
 };
 
 type SalesRep = {
@@ -48,9 +48,9 @@ type ProspectStage = {
 };
 
 type Liability = {
-  AgreementDate: string;
-  IsReleased: boolean;
-  ReleasedBy: number;
+  AgreementDate: string | null;
+  IsReleased: boolean | null;
+  ReleasedBy: number | null;
 };
 export enum Action1 {
   None = "None",
@@ -74,7 +74,7 @@ type CustomClientFieldValue = {
 };
 
 type StringObject = {
-  [x: string]: string;
+  [x: string]: string | null;
 };
 
 type ClientIndex = {
@@ -100,17 +100,17 @@ type Suspension = {
 };
 
 type clientType = {
-  SuspensionInfo: Suspension;
-  AppointmentGenderPreference: AppointmentGenderPreference;
-  BirthDate: string;
+  SuspensionInfo: Suspension | null;
+  AppointmentGenderPreference: AppointmentGenderPreference | string;
+  BirthDate: string | null;
   Country: string;
   CreationDate: string;
   CustomClientFields: CustomClientFieldValue[];
-  ClientCreditCard: StringObject;
+  ClientCreditCard: StringObject | null;
   ClientIndexes: ClientIndex[];
   ClientRelationships: ClientRelationship[];
-  FirstAppointmentDate: string;
-  FirstClassDate: string;
+  FirstAppointmentDate: string | null;
+  FirstClassDate: string | null;
   FirstName: string;
   Id: string;
   IsCompany: boolean;
@@ -119,45 +119,45 @@ type clientType = {
   Liability: Liability;
   LiabilityRelease: boolean;
   MembershipIcon: number;
-  MobileProvider: number;
-  Notes: string;
-  State: string;
-  UniqueId: number;
-  LastModifiedDateTime: string;
-  RedAlert: string;
-  YellowAlert: string;
-  MiddleName: string;
-  ProspectStage: ProspectStage;
-  Email: string;
-  MobilePhone: string;
-  HomePhone: string;
-  WorkPhone: string;
-  AccountBalance: number;
-  AddressLine1: string;
-  AddressLine2: string;
-  City: string;
-  PostalCode: string;
-  WorkExtension: string;
-  ReferredBy: string;
-  PhotoUrl: string;
-  EmergencyContactInfoName: string;
-  EmergencyContactInfoEmail: string;
-  EmergencyContactInfoPhone: string;
-  EmergencyContactInfoRelationship: string;
-  Gender: string;
-  LastFormulaNotes: string;
-  Active: boolean;
-  SalesReps: SalesRep;
-  Status: string;
-  Action: Action1;
-  SendAccountEmails: boolean;
-  SendAccountTexts: boolean;
-  SendPromotionalEmails: boolean;
-  SendPromotionalTexts: boolean;
-  SendScheduleEmails: boolean;
-  SendScheduleTexts: boolean;
-  HomeLocation: Location;
-  LockerNumber: string;
+  MobileProvider: number | null;
+  Notes: string | null;
+  State: string | null;
+  UniqueId: number | null;
+  LastModifiedDateTime: string | null;
+  RedAlert: string | null;
+  YellowAlert: string | null;
+  MiddleName: string | null;
+  ProspectStage: ProspectStage | null;
+  Email: string | null;
+  MobilePhone: string | null;
+  HomePhone: string | null;
+  WorkPhone: string | null;
+  AccountBalance: number | null;
+  AddressLine1: string | null;
+  AddressLine2: string | null;
+  City: string | null;
+  PostalCode: string | null;
+  WorkExtension: string | null;
+  ReferredBy: string | null;
+  PhotoUrl: string | null;
+  EmergencyContactInfoName: string | null;
+  EmergencyContactInfoEmail: string | null;
+  EmergencyContactInfoPhone: string | null;
+  EmergencyContactInfoRelationship: string | null;
+  Gender: string | null;
+  LastFormulaNotes: string | null;
+  Active: boolean | null;
+  SalesReps: SalesRep | null;
+  Status: string | null;
+  Action: Action1 | string | null;
+  SendAccountEmails: boolean | null;
+  SendAccountTexts: boolean | null;
+  SendPromotionalEmails: boolean | null;
+  SendPromotionalTexts: boolean | null;
+  SendScheduleEmails: boolean | null;
+  SendScheduleTexts: boolean | null;
+  HomeLocation: Location | null;
+  LockerNumber: string | null;
 };
 
 export default clientType;

@@ -1,0 +1,158 @@
+{
+  "staffClasses": {
+    "100000052": [
+      { "staffId": 100000052, "name": "Rhi Hariyanto", "duration": 45, "attendance": 7 },
+      { "staffId": 100000052, "name": "Rhi Hariyanto", "duration": 45, "attendance": 13 },
+      { "staffId": 100000052, "name": "Rhi Hariyanto", "duration": 45, "attendance": 14 },
+      { "staffId": 100000052, "name": "Rhi Hariyanto", "duration": 45, "attendance": 9 }
+    ],
+    "100000151": [
+      { "staffId": 100000151, "name": "Weronika Zawistowska", "duration": 45, "attendance": 15 },
+      { "staffId": 100000151, "name": "Weronika Zawistowska", "duration": 45, "attendance": 11 },
+      { "staffId": 100000151, "name": "Weronika Zawistowska", "duration": 45, "attendance": 16 },
+      { "staffId": 100000151, "name": "Weronika Zawistowska", "duration": 45, "attendance": 7 },
+      { "staffId": 100000151, "name": "Weronika Zawistowska", "duration": 45, "attendance": 10 }
+    ],
+    "100000159": [
+      { "staffId": 100000159, "name": "Zoe Kerr", "duration": 45, "attendance": 6 },
+      { "staffId": 100000159, "name": "Zoe Kerr", "duration": 45, "attendance": 5 }
+    ],
+    "100000160": [{ "staffId": 100000160, "name": "Jake Richards", "duration": 45, "attendance": 11 }],
+    "100000165": [
+      { "staffId": 100000165, "name": "Millie Fielding", "duration": 45, "attendance": 13 },
+      { "staffId": 100000165, "name": "Millie Fielding", "duration": 45, "attendance": 23 },
+      { "staffId": 100000165, "name": "Millie Fielding", "duration": 45, "attendance": 14 }
+    ],
+    "100000170": [
+      { "staffId": 100000170, "name": "Joe Williams", "duration": 45, "attendance": 14 },
+      { "staffId": 100000170, "name": "Joe Williams", "duration": 45, "attendance": 14 },
+      { "staffId": 100000170, "name": "Joe Williams", "duration": 45, "attendance": 9 },
+      { "staffId": 100000170, "name": "Joe Williams", "duration": 60, "attendance": 1 }
+    ],
+    "100000171": [
+      { "staffId": 100000171, "name": "James Colebrook", "duration": 45, "attendance": 7 },
+      { "staffId": 100000171, "name": "James Colebrook", "duration": 45, "attendance": 12 }
+    ],
+    "100000179": [
+      { "staffId": 100000179, "name": "Pearl Castor Willox", "duration": 45, "attendance": 14 },
+      { "staffId": 100000179, "name": "Pearl Castor Willox", "duration": 60, "attendance": 11 },
+      { "staffId": 100000179, "name": "Pearl Castor Willox", "duration": 60, "attendance": 18 },
+      { "staffId": 100000179, "name": "Pearl Castor Willox", "duration": 60, "attendance": 19 },
+      { "staffId": 100000179, "name": "Pearl Castor Willox", "duration": 45, "attendance": 18 }
+    ]
+  },
+  "staffsPerormance": [
+    {
+      "staffId": 100000052,
+      "staffName": "Rhi Hariyanto",
+      "appointments": 0,
+      "appointmentsHours": "0.00",
+      "classes": 4,
+      "classHours": "3.00",
+      "totalAttendance": 43,
+      "attendance": 43,
+      "totalHours": "3.00",
+      "uniqueClients": 39,
+      "retentionFactor": "1.10",
+      "averageAttendance": "11"
+    },
+    {
+      "staffId": 100000151,
+      "staffName": "Weronika Zawistowska",
+      "appointments": 0,
+      "appointmentsHours": "0.00",
+      "classes": 5,
+      "classHours": "3.75",
+      "totalAttendance": 59,
+      "attendance": 59,
+      "totalHours": "3.75",
+      "uniqueClients": 55,
+      "retentionFactor": "1.07",
+      "averageAttendance": "12"
+    },
+    {
+      "staffId": 100000159,
+      "staffName": "Zoe Kerr",
+      "appointments": 0,
+      "appointmentsHours": "0.00",
+      "classes": 2,
+      "classHours": "1.50",
+      "totalAttendance": 11,
+      "attendance": 11,
+      "totalHours": "1.50",
+      "uniqueClients": 11,
+      "retentionFactor": "1.00",
+      "averageAttendance": "6"
+    },
+    {
+      "staffId": 100000160,
+      "staffName": "Jake Richards",
+      "appointments": 0,
+      "appointmentsHours": "0.00",
+      "classes": 1,
+      "classHours": "0.75",
+      "totalAttendance": 11,
+      "attendance": 12,
+      "totalHours": "0.75",
+      "uniqueClients": 12,
+      "retentionFactor": "1.00",
+      "averageAttendance": "12"
+    },
+    {
+      "staffId": 100000165,
+      "staffName": "Millie Fielding",
+      "appointments": 0,
+      "appointmentsHours": "0.00",
+      "classes": 3,
+      "classHours": "2.25",
+      "totalAttendance": 50,
+      "attendance": 50,
+      "totalHours": "2.25",
+      "uniqueClients": 50,
+      "retentionFactor": "1.00",
+      "averageAttendance": "17"
+    },
+    {
+      "staffId": 100000170,
+      "staffName": "Joe Williams",
+      "appointments": 0,
+      "appointmentsHours": "0.00",
+      "classes": 4,
+      "classHours": "3.25",
+      "totalAttendance": 38,
+      "attendance": 38,
+      "totalHours": "3.25",
+      "uniqueClients": 37,
+      "retentionFactor": "1.03",
+      "averageAttendance": "10"
+    },
+    {
+      "staffId": 100000171,
+      "staffName": "James Colebrook",
+      "appointments": 0,
+      "appointmentsHours": "0.00",
+      "classes": 2,
+      "classHours": "1.50",
+      "totalAttendance": 19,
+      "attendance": 20,
+      "totalHours": "1.50",
+      "uniqueClients": 18,
+      "retentionFactor": "1.11",
+      "averageAttendance": "10"
+    },
+    {
+      "staffId": 100000179,
+      "staffName": "Pearl Castor Willox",
+      "appointments": 0,
+      "appointmentsHours": "0.00",
+      "classes": 5,
+      "classHours": "4.50",
+      "totalAttendance": 80,
+      "attendance": 80,
+      "totalHours": "4.50",
+      "uniqueClients": 60,
+      "retentionFactor": "1.33",
+      "averageAttendance": "16"
+    }
+  ]
+}

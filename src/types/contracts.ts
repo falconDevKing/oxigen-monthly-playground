@@ -12,24 +12,24 @@ enum PaymentMethod {
 }
 
 type UpcomingAutopayEvents = {
-  ClientContractId: number;
-  ChargeAmount: number;
-  PaymentMethod: PaymentMethod;
-  ScheduleDate: string;
+  ClientContractId: number | null;
+  ChargeAmount: number | null;
+  PaymentMethod: PaymentMethod | string | null;
+  ScheduleDate: string | null;
 };
 
 type clientContracts = {
-  AgreementDate: string;
-  AutopayStatus: AutopayStatus;
-  ContractName: string;
-  EndDate: string;
-  Id: number;
-  OriginationLocationId: number;
-  StartDate: string;
-  SiteId: number;
-  UpcomingAutopayEvents: UpcomingAutopayEvents;
-  ContractID: number;
-  TerminationDate: string;
+  AgreementDate: string | null;
+  AutopayStatus: AutopayStatus | string | null;
+  ContractName: string | null;
+  EndDate: string | null;
+  Id: number | null;
+  OriginationLocationId: number | null;
+  StartDate: string | null;
+  SiteId: number | null;
+  UpcomingAutopayEvents: UpcomingAutopayEvents[];
+  ContractID: number | null;
+  TerminationDate: string | null;
 };
 
 export default clientContracts;

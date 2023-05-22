@@ -2,22 +2,22 @@ import { Location, Action1 } from "./clientType";
 import { Program } from "./services";
 
 export type clientMemberships = {
-  RestrictedLocations: Location[];
-  IconCode: string;
-  MembershipId: number;
-  ActiveDate: string;
-  Count: number;
-  Current: boolean;
-  ExpirationDate: string;
-  Id: number;
-  ProductId: number;
-  Name: string;
-  PaymentDate: string;
-  Program: Program;
-  Remaining: number;
-  SiteId: number;
-  Action: Action1;
-  ClientID: string;
+  RestrictedLocations: Location[] | null;
+  IconCode: string | null;
+  MembershipId: number | null;
+  ActiveDate: string | null;
+  Count: number | null;
+  Current: boolean | null;
+  ExpirationDate: string | null;
+  Id: number | null;
+  ProductId: number | null;
+  Name: string | null;
+  PaymentDate: string | null;
+  Program: Program | null;
+  Remaining: number | null;
+  SiteId: number | null;
+  Action: Action1 | string | null;
+  ClientID: string | null;
 };
 
 export type activeClientsMemberships = {
