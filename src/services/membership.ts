@@ -7,6 +7,7 @@ import {
   paidInFullIds,
   classPassIds,
   inActiveIds,
+  suspendedOutiers,
 } from "../sampleData/membershipGroupings";
 import clientType from "../types/clientType";
 import { getFile } from "../helpers/dynamoDB";
@@ -17,6 +18,8 @@ export const membershipAnalysis = (clientsData: clientType[], activeLeadsIds: st
   const suspendedMembersIds: string[] = [];
   const declinedMembersIds: string[] = [];
   const terminatedMembersIds: string[] = [];
+  const unlimitedMembersIds: string[] = [];
+  const limitedMembersIds: string[] = [];
 
   // create grouped clients by statuses ---> 37
   // get grouped clients ---> 34, V - AE
@@ -39,7 +42,7 @@ export const membershipAnalysis = (clientsData: clientType[], activeLeadsIds: st
       if (client.Status === "Expired") {
         expired += 1;
       }
-      if (client.Status === "Suspended") {
+      if (client.Status === "Suspended" && !suspendedOutiers.includes(client.Id)) {
         suspended += 1;
         suspendedMembersIds.push(client.Id);
       }
@@ -76,9 +79,11 @@ export const membershipAnalysis = (clientsData: clientType[], activeLeadsIds: st
       uniqueMembershipIds?.forEach((membershipId: number) => {
         if (unlimitedBilledIds.includes(membershipId)) {
           unlimited += 1;
+          unlimitedMembersIds.push(clientId);
         }
         if (limitedBilledIds.includes(membershipId)) {
           limited += 1;
+          limitedMembersIds.push(clientId);
         }
         if (challengeUpfrontIds.includes(membershipId)) {
           challenge += 1;
@@ -111,12 +116,12 @@ export const membershipAnalysis = (clientsData: clientType[], activeLeadsIds: st
   const activeBilled = membershipValues.unlimited + membershipValues.limited + membershipValues.declined;
   const totalBilled = activeBilled + membershipValues.suspended;
 
-  return { membershipValues, activeBilled, totalBilled, suspendedMembersIds, declinedMembersIds, terminatedMembersIds };
+  return { membershipValues, activeBilled, totalBilled, suspendedMembersIds, declinedMembersIds, terminatedMembersIds, unlimitedMembersIds, limitedMembersIds };
 };
 
 export const weeklyCancellationsAnalysis = async (fileName: string, newTerminations: string[]) => {
-  const extraData = await getFile(fileName);
-  const oldTerminations = extraData?.terminatedMembersIds;
+  const previousExtraData = await getFile(fileName);
+  const oldTerminations = previousExtraData?.terminatedMembersIds;
 
   const weeklyCancellationsIDs = newTerminations.filter((newTerminatedId: string) => !oldTerminations.includes(newTerminatedId));
   const weeklyCancellations = weeklyCancellationsIDs.length;

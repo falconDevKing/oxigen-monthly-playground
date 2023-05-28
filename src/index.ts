@@ -15,6 +15,7 @@ import fetchClassVisits from "./api/fetchClassVisits";
 import fetchClientVisits from "./api/fetchClientVisits";
 import fetchCompleteClientInfo from "./api/fetchCompleteClientInfo";
 import fetchActiveClientMemberships from "./api/fetchActiveClientMemberships";
+import fetchActiveClientsMemberships from "./api/fetchActiveClientsMemberships";
 import fetchAppointments from "./api/fetchAppointments";
 import promiseAllSettledWrapper from "./helpers/promiseAllSettledFulfiller";
 // import fetchClientContracts from "./api/fetchClientContracts";
@@ -141,9 +142,14 @@ const getWeekReport = async () => {
     const activeLeadsIds = activeLeadsIdsCreator(clientsData, upperFilterDate, weekBegin);
 
     //GET clients Complete info for active and leads -> 20
-    const groupedIds = groupIdsCreator(activeLeadsIds, authToken);
+    ////////    const groupedIds = groupIdsCreator(activeLeadsIds, authToken);
+    const groupedIdsInterim = activeLeadsIds.map((activeLeadsId) => ({
+      authToken,
+      clientId: activeLeadsId,
+    }));
 
-    const activeLeadsClientsMembershipsArray: activeClientsMemberships[][] = await promiseAllSettledWrapper(groupedIds, fetchActiveClientMemberships, 2);
+    ////////    const activeLeadsClientsMembershipsArray: activeClientsMemberships[][] = await promiseAllSettledWrapper(groupedIdsInterim, fetchActiveClientsMemberships, 2);
+    const activeLeadsClientsMembershipsArray: activeClientsMemberships[] = await promiseAllSettledWrapper(groupedIdsInterim, fetchActiveClientMemberships, 2);
     const activeLeadsClientsMemberships = activeLeadsClientsMembershipsArray.flat();
     console.log("activeclients gotten", activeLeadsClientsMemberships.length);
 
@@ -246,11 +252,16 @@ const getWeekReport = async () => {
     const { monthPacksUpfront, monthPacksUpfrontIds } = salesByServicesAnalysis(sales, packsUpfrontIds, upperFilterDate, weekBegin);
 
     // const accountBalanceIds: string[] = [];
-    const { membershipValues, activeBilled, totalBilled, suspendedMembersIds, declinedMembersIds, terminatedMembersIds } = membershipAnalysis(
-      clientsData,
-      activeLeadsIds,
-      activeLeadsClientsMemberships
-    );
+    const {
+      membershipValues,
+      activeBilled,
+      totalBilled,
+      suspendedMembersIds,
+      declinedMembersIds,
+      terminatedMembersIds,
+      limitedMembersIds,
+      unlimitedMembersIds,
+    } = membershipAnalysis(clientsData, activeLeadsIds, activeLeadsClientsMemberships);
 
     // get week sales and sales by category ---> 44, AG, AH
     const { totalWeeklyBilledIncome, totalWeeklyIncome, accountBalance, accountBalanceDebtorsIds } = incomeAnalysis(
@@ -341,8 +352,8 @@ const getWeekReport = async () => {
 
     console.log(data);
 
-    await putItem(data);
-    console.log("ddb gotten");
+    // await putItem(data);
+    // console.log("ddb gotten");
 
     const organisedData = {
       weekLeads: {
@@ -429,13 +440,15 @@ const getWeekReport = async () => {
       staffClasses,
       staffAppointments,
       staffsPerormance,
+      limitedMembersIds,
+      unlimitedMembersIds,
     };
 
     await writeFiler("./src/checks/clients.json", clientsData);
     await writeFiler("./src/checks/extraData.json", extraData);
 
-    await createS3Files("latestClientData.json", "./src/checks/clients.json");
-    await createS3Files(previousWeekBegin + " extraInfoClientData.json", "./src/checks/extraData.json");
+    // await createS3Files("latestClientData.json", "./src/checks/clients.json");
+    // await createS3Files(previousWeekBegin + " extraInfoClientData.json", "./src/checks/extraData.json");
 
     const t1 = performance.now();
     console.log("diff", t1 - t0);
@@ -446,20 +459,127 @@ const getWeekReport = async () => {
 
 getWeekReport();
 
-// const tester = async () => {
-//   const authToken = await getBearerToken();
-//   console.log("token gotten");
+const tester = async () => {
+  ////get bearer token --> 4
+  // const authToken = await getBearerToken();
+  // console.log("token gotten");
+  // const activeLeadsIds = activeLeadsIdsCreator(tClients as clientType[], upperFilterDate, weekBegin);
+  // //GET clients Complete info for active and leads -> 20
+  // const groupedIds = groupIdsCreator(activeLeadsIds, authToken);
+  // const activeLeadsClientsMembershipsArray: activeClientsMemberships[][] = await promiseAllSettledWrapper(groupedIds, fetchActiveClientsMemberships, 2);
+  // const activeLeadsClientsMemberships = activeLeadsClientsMembershipsArray.flat();
+  // console.log("activeclients gotten", activeLeadsClientsMemberships.length);
+  // const { membershipValues, activeBilled, totalBilled, suspendedMembersIds, declinedMembersIds, terminatedMembersIds } = membershipAnalysis(
+  //   tClients as clientType[],
+  //   tActiveLeadsIds,
+  //   tActiveLeadsClientsMemberships
+  // );
+  // console.log(membershipValues, suspendedMembersIds, activeBilled, totalBilled);
+  // const { totalWeeklyBilledIncome, totalWeeklyIncome, accountBalance, accountBalanceDebtorsIds } = incomeAnalysis(
+  //   tClients as clientType[],
+  //   tSales as salesType[],
+  //   previousWeekBegin,
+  //   weekBegin
+  // );
+  // console.log(accountBalance, accountBalanceDebtorsIds);
+  // const accMod = [
+  //   { clientId: "100004053", debt: -540, status: "Active" },
+  //   { clientId: "100003454", debt: -840, status: "Active" },
+  //   { clientId: "100003031", debt: -205, status: "Active" },
+  //   { clientId: "100005459", debt: -1071, status: "Active" },
+  //   { clientId: "100004215", debt: -33.75, status: "Active" },
+  //   { clientId: "2022070612325213267525", debt: -180, status: "Active" },
+  //   { clientId: "2022021610245113740895", debt: -480, status: "Active" },
+  //   { clientId: "100005552", debt: -300, status: "Declined" },
+  //   { clientId: "100002620", debt: -120, status: "Declined" },
+  //   { clientId: "100005882", debt: -550, status: "Suspended" },
+  //   { clientId: "100002326", debt: -540, status: "Suspended" },
+  //   { clientId: "100002116", debt: -108, status: "Terminated" },
+  //   { clientId: "100004513", debt: -205, status: "Terminated" },
+  //   { clientId: "100001235", debt: -108.79, status: "Terminated" },
+  //   { clientId: "100006235", debt: -35, status: "Non-Member" },
+  //   { clientId: "100006252", debt: -35, status: "Non-Member" },
+  //   { clientId: "100006818", debt: -35, status: "Non-Member" },
+  //   { clientId: "100006118", debt: -15, status: "Non-Member" },
+  //   { clientId: "100006193", debt: -35, status: "Non-Member" },
+  //   { clientId: "100005685", debt: -720, status: "Non-Member" },
+  // ];
+  // const accModBal = accMod.reduce((acc, cur) => {
+  //   return acc + cur.debt;
+  // }, 0);
+  // console.log(accModBal);
+  // const { suspendedMembersIds } = membershipAnalysis(tClients as clientType[], tActiveLeadsIds, tActiveLeadsClientsMemberships);
+  // console.log(suspendedMembersIds.length, suspendedMembersIds);
+  // const foundation: string[] = [];
+  // const m2m: string[] = [];
+  // const three: string[] = [];
+  // const six: string[] = [];
+  // const annual: string[] = [];
+  // const getUnlimitedFigures = (clientsMembershipData: string[], activeLeadsClientsMemberships: activeClientsMemberships[]) => {
+  //   let foundation = 0;
+  //   let m2m = 0;
+  //   let three = 0;
+  //   let six = 0;
+  //   let annual = 0;
+  //   const sixArr: string[] = [];
+  //   const annualArr: string[] = [];
+  //   clientsMembershipData.forEach((clientId) => {
+  //     //is it necessary to find since the data was generated from the finding id
+  //     const membershipsIds = activeLeadsClientsMemberships
+  //       .find((activeLeadsClientsMembership) => activeLeadsClientsMembership?.ClientId === clientId)
+  //       ?.Memberships?.map((membership) => membership.MembershipId) as number[];
+  //     const uniqueMembershipIds = Array.from(new Set(membershipsIds));
+  //     uniqueMembershipIds?.forEach((membershipId: number) => {
+  //       if ([4010].includes(membershipId)) {
+  //         foundation += 1;
+  //         // unlimitedMembersIds.push(clientId);
+  //       }
+  //       if ([4011].includes(membershipId)) {
+  //         m2m += 1;
+  //       }
+  //       if ([4012].includes(membershipId)) {
+  //         annual += 1;
+  //         annualArr.push(clientId);
+  //       }
+  //       if ([4013].includes(membershipId)) {
+  //         three += 1;
+  //       }
+  //       if ([4014].includes(membershipId)) {
+  //         six += 1;
+  //         sixArr.push(clientId);
+  //       }
+  //     });
+  //   });
+  //   return { foundation, m2m, three, six, annual, sixArr, annualArr };
+  // };
+  // const separate = getUnlimitedFigures(unlimitedMembersIds, tActiveLeadsClientsMemberships);
+  // console.log(separate);
+  // const leadsPurchasedNothingAnalysis = (sales: salesType[], monthLeadsIds: string[], monthBilledLeadsIds: string[]) => {
+  //   const leadsPurchasedIds = Array.from(new Set([...sales.map((sale) => sale.ClientId), ...monthBilledLeadsIds]));
+  //   let leadPurchasedNothing = 0;
+  //   const leadPurchasedNothingIds = monthLeadsIds.reduce((accumulator, currentValue) => {
+  //     if (!leadsPurchasedIds.includes(currentValue)) {
+  //       leadPurchasedNothing += 1;
+  //       return [...accumulator, currentValue];
+  //     } else {
+  //       return accumulator;
+  //     }
+  //   }, [] as string[]);
+  //   return { leadsPurchasedIds, leadPurchasedNothing, leadPurchasedNothingIds };
+  // };
+  // const monthBilledLeadsIds = ["100006851", "100006803"];
+  // const introServicesIds = introServicesIdsCreator(tServices as services[]);
+  // const { monthLeadsCount, monthLeadsIds, monthLeadsTrialsCount } = monthLeadsAnalysis(
+  //   tClients as clientType[],
+  //   tSales as salesType[],
+  //   introServicesIds,
+  //   upperFilterDate,
+  //   weekBegin
+  // );
+  // const outcome = leadsPurchasedNothingAnalysis(tSales as salesType[], monthLeadsIds, monthBilledLeadsIds);
+  // console.log(outcome.leadPurchasedNothingIds?.length, outcome.leadPurchasedNothingIds);
+  // const suspendedGuys = (tClients as clientType[]).filter((client) => client.Status === "Suspended");
+  // await writeFiler("./src/checks/suspended.json", suspendedGuys);
+};
 
-//   const staffAppointments: Appointments[] = await fetchAppointments(authToken, "2023-05-08T00:00:00Z", "2023-05-15T00:00:00Z");
-//   console.log("staffAppointments gotten", staffAppointments.length);
-
-//   const staffPerformanceResult = staffPerformanceAnalysis(tWeekClasses, tWeekClassesVisits, staffAppointments, "2023-05-08T00:00:00Z", "2023-05-15T00:00:00Z");
-//   console.log(staffPerformanceResult);
-
-//   await writeFiler("./src/checks/staffPerformanceResult.json", staffPerformanceResult);
-
-//   const t1 = performance.now();
-//   console.log("diff", t1 - t0);
-// };
-
-// // tester();
+// tester();

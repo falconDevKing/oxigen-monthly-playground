@@ -1,6 +1,6 @@
 import Axios from "../helpers/axiosInstance";
 
-export default async function fetchActiveClientMemberships({ authToken, clientId }: { authToken: string; clientId: string }) {
+export default async function fetchActiveClientsMemberships({ authToken, clientIds }: { authToken: string; clientIds: string[] }) {
   try {
     const offsetMax = 200;
     let offsetValue = 0;
@@ -8,8 +8,8 @@ export default async function fetchActiveClientMemberships({ authToken, clientId
     let clientsMembershipsObjectsArray: any[] = [];
 
     const fetchMembershipsData = async () => {
-      const fetchedClientsMemberships = await Axios.get("client/activeclientmemberships", {
-        params: { limit: 200, offset: offsetValue, clientId: clientId },
+      const fetchedClientsMemberships = await Axios.get("client/activeclientsmemberships", {
+        params: { limit: 200, offset: offsetValue, clientIds: clientIds },
         headers: { Authorization: authToken },
       });
       const clientMemberships = fetchedClientsMemberships.data.ClientMemberships;
@@ -28,7 +28,7 @@ export default async function fetchActiveClientMemberships({ authToken, clientId
 
     await fetchMembershipsData();
 
-    return { ClientId: clientId, Memberships: clientsMembershipsObjectsArray };
+    return clientsMembershipsObjectsArray;
   } catch (err: any) {
     console.log("Error getting clients", err?.message, err);
     throw new Error(err?.message ?? "Error getting clients");

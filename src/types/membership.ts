@@ -23,7 +23,7 @@ export type clientMemberships = {
 export type activeClientsMemberships = {
   ClientId: string;
   Memberships: clientMemberships[];
-  ErrorMessage: string;
+  ErrorMessage?: string;
 };
 
 type OnlineBookingRestrictedToMembersOnly = {
