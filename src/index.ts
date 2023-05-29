@@ -246,7 +246,7 @@ const getWeekReport = async () => {
     );
 
     // get trials purchasers with visits to billed members percent -> 34, R
-    const percentMonthTDTrialsWithVisitToBilled = Number((monthTrialPurcahsersWithVisitToBilled / monthTrialsPurchased) * 100).toFixed(2);
+    const percentMonthTDTrialsWithVisitToBilled = Number((monthTrialPurcahsersWithVisitToBilled / monthTrialsToFirstVisited) * 100).toFixed(2);
 
     // get packs and upfront for month ---> 35,S
     const { monthPacksUpfront, monthPacksUpfrontIds } = salesByServicesAnalysis(sales, packsUpfrontIds, upperFilterDate, weekBegin);
@@ -352,8 +352,8 @@ const getWeekReport = async () => {
 
     console.log(data);
 
-    // await putItem(data);
-    // console.log("ddb gotten");
+    await putItem(data);
+    console.log("ddb gotten");
 
     const organisedData = {
       weekLeads: {
@@ -447,8 +447,8 @@ const getWeekReport = async () => {
     await writeFiler("./src/checks/clients.json", clientsData);
     await writeFiler("./src/checks/extraData.json", extraData);
 
-    // await createS3Files("latestClientData.json", "./src/checks/clients.json");
-    // await createS3Files(previousWeekBegin + " extraInfoClientData.json", "./src/checks/extraData.json");
+    await createS3Files("latestClientData.json", "./src/checks/clients.json");
+    await createS3Files(previousWeekBegin + " extraInfoClientData.json", "./src/checks/extraData.json");
 
     const t1 = performance.now();
     console.log("diff", t1 - t0);
@@ -457,7 +457,7 @@ const getWeekReport = async () => {
   }
 };
 
-getWeekReport();
+// getWeekReport();
 
 const tester = async () => {
   ////get bearer token --> 4

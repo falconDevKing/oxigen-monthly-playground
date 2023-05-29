@@ -108,7 +108,7 @@ export const getFile = async (fileName: string) => {
     const data = await s3Client.send(new GetObjectCommand(bucketParams));
     // Convert the ReadableStream to a string.
     const dataString = (await data?.Body?.transformToString()) as string;
-    console.log("s3 data", data);
+    console.log("s3 data gotten");
     // convert stram to json
     const result = JSON.parse(dataString);
     return result;
