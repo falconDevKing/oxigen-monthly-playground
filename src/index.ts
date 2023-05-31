@@ -321,7 +321,8 @@ const getMonthReport = async () => {
       monthlyIncomeGrowth: totalMonthlyIncome - (previousMonthResult?.totalMonthlyIncome ?? 0),
       accountBalanceOwing: accountBalance,
       averageBillingPerMember,
-      weekAttendance: attendance,
+      classesCount: nonCancelledClassesIds.length,
+      attendance: attendance,
       noShowCancel: missedVisits,
       unpaidVisits,
       terminated,
@@ -380,6 +381,7 @@ const getMonthReport = async () => {
         averageBillingPerMember,
       },
       visits: {
+        classesCount: nonCancelledClassesIds.length,
         attendance: attendance,
         noShowLateCancels: missedVisits,
         unpaidVisits,

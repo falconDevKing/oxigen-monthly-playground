@@ -4,13 +4,13 @@ import { modifyDate } from "../helpers/helpers";
 import classes, { Appointments, staffData } from "../types/classes";
 
 export const staffPerformanceAnalysis = (
-  weekClasses: classes[],
-  weekClassesVisits: visitType[],
+  monthClasses: classes[],
+  monthClassesVisits: visitType[],
   staffAppointments: Appointments[],
   previousMonthBegin: string,
   monthBegin: string
 ) => {
-  const staffClasses = weekClasses
+  const staffClasses = monthClasses
     .filter((classes) => {
       const modFilterDate = modifyDate(classes?.StartDateTime as string);
       const response =
@@ -18,9 +18,9 @@ export const staffPerformanceAnalysis = (
 
       return response;
     })
-    .map((weekClass) => {
-      const duration = moment(weekClass?.EndDateTime).diff(moment(weekClass?.StartDateTime), "minutes");
-      return { staffId: weekClass?.Staff?.Id, name: weekClass?.Staff?.DisplayName, duration: duration, attendance: weekClass?.TotalSignedIn };
+    .map((monthClass) => {
+      const duration = moment(monthClass?.EndDateTime).diff(moment(monthClass?.StartDateTime), "minutes");
+      return { staffId: monthClass?.Staff?.Id, name: monthClass?.Staff?.DisplayName, duration: duration, attendance: monthClass?.TotalSignedIn };
     })
     .reduce((group, classes) => {
       const staffId = classes.staffId as number;
@@ -45,7 +45,7 @@ export const staffPerformanceAnalysis = (
       numberOfClasses += 1;
     });
 
-    const staffVisitsors = weekClassesVisits.reduce((accumulator, currentValue) => {
+    const staffVisitsors = monthClassesVisits.reduce((accumulator, currentValue) => {
       const modFilterDate = modifyDate(currentValue?.StartDateTime as string);
       if (
         currentValue.StaffId === staffId &&
