@@ -113,6 +113,6 @@ export const getFile = async (fileName: string) => {
     const result = JSON.parse(dataString);
     return result;
   } catch (err) {
-    console.log("Error geting", err);
+    console.log("Error geting s3 file", err);
   }
 };

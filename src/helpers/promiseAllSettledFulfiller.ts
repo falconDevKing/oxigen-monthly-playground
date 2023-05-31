@@ -3,6 +3,7 @@ const promiseAllSettledWrapper = async (paramsArray: any[], asyncFuntionCall: (p
   let failedRuns = 0;
 
   const promiseAllSettledHelper = async (helperParamsArray: any[], helperAsyncFuntionCall: (params: any) => any) => {
+    console.log("fetchDataRun", failedRuns);
     const apiCallResponses = await Promise.allSettled(
       helperParamsArray.map(async (params) => {
         const apiResponse = await helperAsyncFuntionCall(params);
@@ -22,7 +23,7 @@ const promiseAllSettledWrapper = async (paramsArray: any[], asyncFuntionCall: (p
     collatedResults = [...collatedResults, ...apiCallResponsesValues];
 
     if (failedBody.length && failedRuns < maxFails) {
-      console.log("fetchedDatahasfails", failedRuns);
+      console.log("fetchedDatahasfails", failedRuns, collatedResults.length);
       failedRuns++;
       await promiseAllSettledHelper(failedBody, helperAsyncFuntionCall);
     }
