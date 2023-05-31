@@ -68,14 +68,8 @@ import { staffPerformanceAnalysis } from "./services/staffPerformance";
 import { nonCancelledClassesIdsGenerator } from "././services/classes";
 import { activeLeadsIdsCreator, groupIdsCreator } from "./services/clients";
 import { introServicesIdsCreator, packsUpfrontIdsCreator } from "./services/services";
-import { membershipAnalysis, weeklyCancellationsAnalysis } from "./services/membership";
-import {
-  leadsPurchasedNothingAnalysis,
-  monthLeadsAnalysis,
-  monthLeadsBilledAnalysis,
-  monthLeadsPacksUpfrontAnalysis,
-  weekLeadsAnalysis,
-} from "./services/leads";
+import { membershipAnalysis, monthlyCancellationsAnalysis } from "./services/membership";
+import { leadsPurchasedNothingAnalysis, monthLeadsAnalysis, monthLeadsBilledAnalysis, monthLeadsPacksUpfrontAnalysis } from "./services/leads";
 
 const t0 = performance.now();
 
@@ -87,24 +81,18 @@ const writeFiler = async (path: string, data: any) => {
 
 //generate dates -> 2
 const formatString = "YYYY-MM-DDTHH:mm:ss[Z]";
+const previousReportDate = moment().startOf("month").subtract(2, "months").format(formatString);
 const previousMonthBegin = moment().startOf("month").subtract(1, "months").format(formatString);
-const previousReportDate = moment().startOf("week").subtract(2, "weeks").add(1, "days").format(formatString);
-const previousWeekBegin = moment().startOf("week").subtract(1, "weeks").add(1, "days").format(formatString);
-const weekBegin = moment().startOf("week").add(1, "days").format(formatString);
 const monthBegin = moment().startOf("month").format(formatString);
 
-console.log("t", monthBegin, previousMonthBegin, weekBegin, previousWeekBegin, previousReportDate);
+console.log("t", monthBegin, previousMonthBegin, previousReportDate);
 
 //Determine Filter Dates -> 3
-const upperSalesDate = moment(monthBegin).isSame(moment(), "day")
-  ? previousMonthBegin
-  : moment(previousWeekBegin).isBefore(monthBegin)
-  ? previousWeekBegin
-  : monthBegin;
-const upperFilterDate = moment(monthBegin).isSame(moment(), "day") ? previousMonthBegin : monthBegin;
+const upperSalesDate = previousMonthBegin;
+const upperFilterDate = previousMonthBegin;
 console.log("upperSalesDate", upperSalesDate, upperFilterDate);
 
-const getWeekReport = async () => {
+const getMonthReport = async () => {
   try {
     ////get bearer token --> 4
     const authToken = await getBearerToken();
@@ -119,27 +107,27 @@ const getWeekReport = async () => {
     console.log("services gotten");
 
     //Fetch all sales -> 7 -> upperDate,weekBegin
-    const sales: salesType[] = await fetchSales(authToken, upperSalesDate, weekBegin);
+    const sales: salesType[] = await fetchSales(authToken, upperSalesDate, monthBegin);
     console.log("sales gotten");
 
     //fecth week classes --> 8
-    const weekClasses: classes[] = await fetchClasses(authToken, previousWeekBegin, weekBegin);
-    console.log("weekClass gotten", weekClasses.length);
+    const monthClasses: classes[] = await fetchClasses(authToken, upperFilterDate, monthBegin);
+    console.log("monthClass gotten", monthClasses.length);
 
     // get noncancelld class Ids --> 9
-    const nonCancelledClassesIds = nonCancelledClassesIdsGenerator(weekClasses, authToken);
+    const nonCancelledClassesIds = nonCancelledClassesIdsGenerator(monthClasses, authToken);
 
     // fectch class visits --> 10
-    const weekClassesVisitsArray: visitType[][] = await promiseAllSettledWrapper(nonCancelledClassesIds, fetchClassVisits, 2);
-    const weekClassesVisits = weekClassesVisitsArray.flat();
-    console.log("weekClassVisits gotten", weekClassesVisits.length);
+    const monthClassesVisitsArray: visitType[][] = await promiseAllSettledWrapper(nonCancelledClassesIds, fetchClassVisits, 2);
+    const monthClassesVisits = monthClassesVisitsArray.flat();
+    console.log("monthClassVisits gotten", monthClassesVisits.length);
 
     //fetchAppointments
-    const staffAppointments: Appointments[] = await fetchAppointments(authToken, previousWeekBegin, weekBegin);
+    const staffAppointments: Appointments[] = await fetchAppointments(authToken, previousMonthBegin, monthBegin);
     console.log("staffAppointments gotten", staffAppointments.length);
 
     //filter for leads and active clients ids -> 19
-    const activeLeadsIds = activeLeadsIdsCreator(clientsData, upperFilterDate, weekBegin);
+    const activeLeadsIds = activeLeadsIdsCreator(clientsData, previousMonthBegin, monthBegin);
 
     //GET clients Complete info for active and leads -> 20
     ////////    const groupedIds = groupIdsCreator(activeLeadsIds, authToken);
@@ -159,15 +147,8 @@ const getWeekReport = async () => {
     //get packs and upfront services id -> 18
     const packsUpfrontIds = packsUpfrontIdsCreator(services);
 
-    //Filter clients for new weeks leads count and store thier ids [weekLeadsIds] -> 12,C
-    //get week trials ---> 13,D
-    const { weekLeadsCount, weekLeadsIds, weekLeadsTrialsCount } = weekLeadsAnalysis(clientsData, sales, introServicesIds, previousWeekBegin, weekBegin);
-
-    //get week trials percent ---> 14,E
-    const percentWeekLeadToTrial = Number((weekLeadsTrialsCount / weekLeadsCount) * 100).toFixed(2);
-
     //GET NEW LEADS FOR THE MONTHS count and store thier ids [weekLeadsIds] ---> 15,F
-    const { monthLeadsCount, monthLeadsIds, monthLeadsTrialsCount } = monthLeadsAnalysis(clientsData, sales, introServicesIds, upperFilterDate, weekBegin);
+    const { monthLeadsCount, monthLeadsIds, monthLeadsTrialsCount } = monthLeadsAnalysis(clientsData, sales, introServicesIds, previousMonthBegin, monthBegin);
 
     //get month trials percent ---> 17,H
     const percentMonthLeadToTrial = Number((monthLeadsTrialsCount / monthLeadsCount) * 100).toFixed(2);
@@ -177,8 +158,8 @@ const getWeekReport = async () => {
     const monthLeadsCompleteClientsParams = monthLeadsIds.map((monthLead) => ({
       authToken,
       clientId: monthLead,
-      startDate: previousWeekBegin,
-      endDate: weekBegin,
+      startDate: previousMonthBegin,
+      endDate: monthBegin,
     }));
     const monthLeadsCompleteClients: completeClientInfo[] = await promiseAllSettledWrapper(monthLeadsCompleteClientsParams, fetchCompleteClientInfo, 2);
     console.log("monthLeadsContracts gotten");
@@ -195,8 +176,8 @@ const getWeekReport = async () => {
       monthLeadsIds,
       sales,
       packsUpfrontIds,
-      upperFilterDate,
-      weekBegin
+      previousMonthBegin,
+      monthBegin
     );
 
     //get packs and upfront leads percent--> 25,L
@@ -211,8 +192,8 @@ const getWeekReport = async () => {
       sales,
       introServicesIds,
       authToken,
-      upperFilterDate,
-      weekBegin
+      previousMonthBegin,
+      monthBegin
     );
 
     //fetch trial purcahsers Visits --> 29
@@ -226,8 +207,8 @@ const getWeekReport = async () => {
       monthTrialsToVisits,
       monthTrialsPurchasersIds,
       authToken,
-      upperFilterDate,
-      weekBegin
+      previousMonthBegin,
+      monthBegin
     );
 
     // get trials first visits percent ---> 32,P
@@ -249,7 +230,7 @@ const getWeekReport = async () => {
     const percentMonthTDTrialsWithVisitToBilled = Number((monthTrialPurcahsersWithVisitToBilled / monthTrialsToFirstVisited) * 100).toFixed(2);
 
     // get packs and upfront for month ---> 35,S
-    const { monthPacksUpfront, monthPacksUpfrontIds } = salesByServicesAnalysis(sales, packsUpfrontIds, upperFilterDate, weekBegin);
+    const { monthPacksUpfront, monthPacksUpfrontIds } = salesByServicesAnalysis(sales, packsUpfrontIds, previousMonthBegin, monthBegin);
 
     // const accountBalanceIds: string[] = [];
     const {
@@ -264,37 +245,39 @@ const getWeekReport = async () => {
     } = membershipAnalysis(clientsData, activeLeadsIds, activeLeadsClientsMemberships);
 
     // get week sales and sales by category ---> 44, AG, AH
-    const { totalWeeklyBilledIncome, totalWeeklyIncome, accountBalance, accountBalanceDebtorsIds } = incomeAnalysis(
+    const { totalMonthlyBilledIncome, totalMonthlyIncome, accountBalance, accountBalanceDebtorsIds } = incomeAnalysis(
       clientsData,
       sales,
-      previousWeekBegin,
-      weekBegin
+      previousMonthBegin,
+      monthBegin
     );
 
     //get average billing per member 47, AK
-    const averageBillingPerMember = Number(totalWeeklyIncome / activeBilled).toFixed(2);
+    const averageBillingPerMember = Number(totalMonthlyIncome / activeBilled).toFixed(2);
 
     // get clients visits 48, AL
     // get clients missed Visits 49, AM
     //get clients unpaid visits 50, AN
-    const { attendance, missedVisits, unpaidVisits, missedVisitsArray, unpaidVisitsArray } = visitAnalysis(weekClassesVisits, previousWeekBegin);
+    const { attendance, missedVisits, unpaidVisits, missedVisitsArray, unpaidVisitsArray } = visitAnalysis(monthClassesVisits, previousMonthBegin);
 
-    const { staffClasses, staffsPerormance } = staffPerformanceAnalysis(weekClasses, weekClassesVisits, staffAppointments, previousWeekBegin, weekBegin);
+    const { staffClasses, staffsPerormance } = staffPerformanceAnalysis(monthClasses, monthClassesVisits, staffAppointments, previousMonthBegin, monthBegin);
 
     //get previous total billed members, terminations and totalWeeklySales  -> 41
-    const previousWeekResults = await queryTable(previousReportDate);
-    const sortedweekResults = previousWeekResults?.sort((a, b) => {
-      const aDate = moment(a?.updatedAt);
-      const bDate = moment(b?.updatedAt);
+    const previousMonthResults = await queryTable(previousReportDate);
+    const sortedMonthResults = previousMonthResults
+      ?.filter((res) => res?.reportType === "month")
+      .sort((a, b) => {
+        const aDate = moment(a?.updatedAt);
+        const bDate = moment(b?.updatedAt);
 
-      return aDate === bDate ? 0 : aDate > bDate ? -1 : 1;
-    });
-    const previousWeekResult = (sortedweekResults as any[])[0];
+        return aDate === bDate ? 0 : aDate > bDate ? -1 : 1;
+      });
+    const previousMonthResult = (sortedMonthResults as any[])[0];
     console.log("PWR gotten");
 
     const { limited, unlimited, challenge, complimentary, paidInFull, classPass, suspended, declined, terminated, ...rest } = membershipValues;
 
-    const { weeklyCancellations, weeklyCancellationsIDs } = await weeklyCancellationsAnalysis(
+    const { monthlyCancellations, monthlyCancellationsIDs } = await monthlyCancellationsAnalysis(
       previousReportDate + " extraInfoClientData.json",
       terminatedMembersIds
     );
@@ -304,10 +287,8 @@ const getWeekReport = async () => {
     //get totalWeeklysales growth -> 45, AI
     const data = {
       id: uuidv4(),
-      reportWeek: previousWeekBegin,
-      newWeekLeadsCount: weekLeadsCount,
-      newWeekLeadsTrials: weekLeadsTrialsCount,
-      percentWeekLeadToTrial,
+      reportType: "month",
+      reportWeek: previousMonthBegin,
       monthTDLeads: monthLeadsCount,
       monthTDLeadsTrials: monthLeadsTrialsCount,
       percentMonthLeadToTrial,
@@ -332,12 +313,12 @@ const getWeekReport = async () => {
       classPasses: classPass,
       Suspended: suspended,
       declined: declined,
-      billedMemberGrowth: totalBilled - previousWeekResult?.totalBilled,
-      weeklyCancellations: weeklyCancellations,
-      attritionRate: Number((weeklyCancellations * 100) / totalBilled).toFixed(2),
-      totalWeeklyBilledIncome,
-      totalWeeklyIncome,
-      weeklyIncomeGrowth: totalWeeklyIncome - previousWeekResult.totalWeeklyIncome,
+      billedMemberGrowth: totalBilled - (previousMonthResult?.totalBilled ?? 0),
+      monthlyCancellations: monthlyCancellations,
+      attritionRate: Number((monthlyCancellations * 100) / totalBilled).toFixed(2),
+      totalMonthlyBilledIncome,
+      totalMonthlyIncome,
+      monthlyIncomeGrowth: totalMonthlyIncome - (previousMonthResult?.totalMonthlyIncome ?? 0),
       accountBalanceOwing: accountBalance,
       averageBillingPerMember,
       weekAttendance: attendance,
@@ -356,11 +337,6 @@ const getWeekReport = async () => {
     console.log("ddb gotten");
 
     const organisedData = {
-      weekLeads: {
-        newLeadsForTheWeek: weekLeadsCount,
-        newLeadsOnTrialForTheWeek: weekLeadsTrialsCount,
-        percentLeadToTrialsWeek: percentWeekLeadToTrial,
-      },
       monthLeads: {
         newLeadsForTheMonth: monthLeadsCount,
         newLeadsOnTrialForTheMonth: monthLeadsTrialsCount,
@@ -390,14 +366,14 @@ const getWeekReport = async () => {
         classPasses: classPass,
         suspended: suspended,
         declined: declined,
-        billedMembergrowth: totalBilled - previousWeekResult.totalBilled,
-        weeklyCancellations: weeklyCancellations,
-        attritionRate: Number((weeklyCancellations * 100) / totalBilled).toFixed(2),
+        billedMembergrowth: totalBilled - (previousMonthResult?.totalBilled ?? 0),
+        monthlyCancellations: monthlyCancellations,
+        attritionRate: Number((monthlyCancellations * 100) / totalBilled).toFixed(2),
       },
       sales: {
-        weeklyBilledIncome: totalWeeklyBilledIncome,
-        totalWeeklyIncome: totalWeeklyIncome,
-        weeklyIncomeGrowth: totalWeeklyIncome - previousWeekResult.totalWeeklyIncome,
+        monthlyBilledIncome: totalMonthlyBilledIncome,
+        totalMonthlyIncome: totalMonthlyIncome,
+        monthlyIncomeGrowth: totalMonthlyIncome - (previousMonthResult.totalMonthlyIncome ?? 0),
       },
       balances: {
         accountBalanceAccruals: accountBalance,
@@ -416,12 +392,12 @@ const getWeekReport = async () => {
       organisedData,
       services,
       sales,
-      weekClasses,
-      weekClassesVisits,
+      monthClasses,
+      monthClassesVisits,
       activeLeadsIds,
       activeLeadsClientsMemberships,
       monthTrialsToVisits,
-      weeklyCancellationsIDs,
+      monthlyCancellationsIDs,
       terminatedMembersIds,
       suspendedMembersIds,
       declinedMembersIds,
@@ -448,7 +424,7 @@ const getWeekReport = async () => {
     await writeFiler("./src/checks/extraData.json", extraData);
 
     await createS3Files("latestClientData.json", "./src/checks/clients.json");
-    await createS3Files(previousWeekBegin + " extraInfoClientData.json", "./src/checks/extraData.json");
+    await createS3Files(previousMonthBegin + " extraInfoClientData.json", "./src/checks/extraData.json");
 
     const t1 = performance.now();
     console.log("diff", t1 - t0);
@@ -457,7 +433,7 @@ const getWeekReport = async () => {
   }
 };
 
-// getWeekReport();
+// getMonthReport();
 
 const tester = async () => {
   ////get bearer token --> 4

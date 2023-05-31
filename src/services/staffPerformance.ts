@@ -7,14 +7,14 @@ export const staffPerformanceAnalysis = (
   weekClasses: classes[],
   weekClassesVisits: visitType[],
   staffAppointments: Appointments[],
-  previousWeekBegin: string,
-  weekBegin: string
+  previousMonthBegin: string,
+  monthBegin: string
 ) => {
   const staffClasses = weekClasses
     .filter((classes) => {
       const modFilterDate = modifyDate(classes?.StartDateTime as string);
       const response =
-        !classes.IsCanceled && moment(modFilterDate).isSameOrAfter(previousWeekBegin, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
+        !classes.IsCanceled && moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") && moment(monthBegin).isAfter(modFilterDate, "hour");
 
       return response;
     })
@@ -50,8 +50,8 @@ export const staffPerformanceAnalysis = (
       if (
         currentValue.StaffId === staffId &&
         !currentValue.Missed &&
-        moment(modFilterDate).isSameOrAfter(previousWeekBegin, "hour") &&
-        moment(weekBegin).isAfter(modFilterDate, "hour")
+        moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") &&
+        moment(monthBegin).isAfter(modFilterDate, "hour")
       ) {
         return [...accumulator, currentValue.ClientId as string];
       }

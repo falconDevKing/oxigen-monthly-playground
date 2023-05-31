@@ -1,7 +1,7 @@
 import classes from "../types/classes";
 
-export const nonCancelledClassesIdsGenerator = (weekClasses: classes[], authToken: string) => {
-  const nonCancelledClassesIds = weekClasses.reduce((accumulator, currentValue) => {
+export const nonCancelledClassesIdsGenerator = (monthClasses: classes[], authToken: string) => {
+  const nonCancelledClassesIds = monthClasses.reduce((accumulator, currentValue) => {
     if (currentValue.IsCanceled) {
       return accumulator;
     }

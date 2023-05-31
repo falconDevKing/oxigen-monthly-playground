@@ -3,19 +3,19 @@ import { modifyDate } from "../helpers/helpers";
 import clientType from "../types/clientType";
 import salesType from "../types/sales";
 
-export const incomeAnalysis = (clientsData: clientType[], sales: salesType[], previousWeekBegin: string, weekBegin: string) => {
-  // get week sales and sales by category ---> 44, AG, AH
-  let totalWeeklyBilledIncome = 0;
-  let totalWeeklyIncome = 0;
+export const incomeAnalysis = (clientsData: clientType[], sales: salesType[], previousMonthBegin: string, monthBegin: string) => {
+  // get Month sales and sales by category ---> 44, AG, AH
+  let totalMonthlyBilledIncome = 0;
+  let totalMonthlyIncome = 0;
   (sales as salesType[])?.forEach((sale) => {
     const modFilterDate = modifyDate(sale.SaleDateTime);
-    const considerableSale = moment(modFilterDate).isSameOrAfter(previousWeekBegin, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
+    const considerableSale = moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") && moment(monthBegin).isAfter(modFilterDate, "hour");
     if (considerableSale) {
       sale.PurchasedItems.forEach((purchasedItem, index) => {
         if (sale.Payments[index]?.TransactionId) {
-          totalWeeklyIncome = totalWeeklyIncome + purchasedItem.TotalAmount;
+          totalMonthlyIncome = totalMonthlyIncome + purchasedItem.TotalAmount;
           if (purchasedItem.ContractId) {
-            totalWeeklyBilledIncome = totalWeeklyBilledIncome + purchasedItem.TotalAmount;
+            totalMonthlyBilledIncome = totalMonthlyBilledIncome + purchasedItem.TotalAmount;
           }
         }
       });
@@ -34,5 +34,5 @@ export const incomeAnalysis = (clientsData: clientType[], sales: salesType[], pr
     return accumulator;
   }, [] as { clientId: string; debt: number; status: string }[]);
 
-  return { totalWeeklyBilledIncome, totalWeeklyIncome, accountBalance, accountBalanceDebtorsIds };
+  return { totalMonthlyBilledIncome, totalMonthlyIncome, accountBalance, accountBalanceDebtorsIds };
 };

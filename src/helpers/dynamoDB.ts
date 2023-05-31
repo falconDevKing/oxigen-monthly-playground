@@ -61,7 +61,7 @@ export const queryTable = async (reportWeek: string) => {
   };
   try {
     const data = await ddbDocClient.send(new QueryCommand(params));
-    return data.Items as any[];
+    return (data.Items as any[]) ?? [];
   } catch (err) {
     console.log("Error", err);
   }

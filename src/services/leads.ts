@@ -4,55 +4,18 @@ import { modifyDate } from "../helpers/helpers";
 import salesType, { PurchasedItems, modifiedPurchasedItems } from "../types/sales";
 import completeClientInfo from "../types/completeClientInfo";
 
-export const weekLeadsAnalysis = (clientsData: clientType[], sales: salesType[], introServicesIds: number[], previousWeekBegin: string, weekBegin: string) => {
-  //Filter clients for new weeks leads count and store thier ids [weekLeadsIds] -> 12,C
-  let weekLeadsCount = 0;
-  const weekLeadsIds = clientsData?.reduce((accumulator, currentValue) => {
-    const modFilterDate = modifyDate(currentValue?.CreationDate);
-    const weekLead = moment(modFilterDate).isSameOrAfter(previousWeekBegin, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
-
-    if (weekLead) {
-      weekLeadsCount += 1;
-      return [...accumulator, currentValue.Id];
-    } else {
-      return accumulator;
-    }
-  }, [] as string[]);
-
-  //get week trials ---> 13,D
-  const weekLeadsTrialsCount = weekLeadsIds.reduce((accumulator, currentVal) => {
-    const leadPurchasedItems = sales
-      .reduce((acc, curr) => {
-        if (
-          curr.ClientId === currentVal &&
-          moment(curr.SaleDateTime).isSameOrAfter(previousWeekBegin, "hour") &&
-          moment(weekBegin).isAfter(curr.SaleDateTime, "hour")
-        ) {
-          return [...acc, curr.PurchasedItems];
-        }
-        return acc;
-      }, [] as PurchasedItems[][])
-      .flat();
-
-    const leadSaleItemsTrial = leadPurchasedItems.map((leadPurchasedItem) => introServicesIds.includes(leadPurchasedItem.Id));
-    const leadTrial = leadSaleItemsTrial.includes(true);
-
-    if (leadTrial) {
-      return accumulator + 1;
-    } else {
-      return accumulator;
-    }
-  }, 0);
-
-  return { weekLeadsCount, weekLeadsIds, weekLeadsTrialsCount };
-};
-
-export const monthLeadsAnalysis = (clientsData: clientType[], sales: salesType[], introServicesIds: number[], upperFilterDate: string, weekBegin: string) => {
-  //GET NEW LEADS FOR THE MONTHS count and store thier ids [weekLeadsIds] ---> 15,F
+export const monthLeadsAnalysis = (
+  clientsData: clientType[],
+  sales: salesType[],
+  introServicesIds: number[],
+  previousMonthBegin: string,
+  monthBegin: string
+) => {
+  //GET NEW LEADS FOR THE MONTHS count and store thier ids [monthLeadsIds] ---> 15,F
   let monthLeadsCount = 0;
   const monthLeadsIds: string[] = clientsData?.reduce((accumulator, client) => {
     const modFilterDate = modifyDate(client?.CreationDate);
-    const monthLead = moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour");
+    const monthLead = moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") && moment(monthBegin).isAfter(modFilterDate, "hour");
     if (monthLead) {
       monthLeadsCount += 1;
       return [...accumulator, client.Id];
@@ -66,7 +29,11 @@ export const monthLeadsAnalysis = (clientsData: clientType[], sales: salesType[]
     const leadPurchasedItems = sales
       .reduce((acc, curr) => {
         const modFilterDate = modifyDate(curr.SaleDateTime);
-        if (curr.ClientId === currentVal && moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+        if (
+          curr.ClientId === currentVal &&
+          moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") &&
+          moment(monthBegin).isAfter(modFilterDate, "hour")
+        ) {
           return [...acc, curr.PurchasedItems];
         }
         return acc;
@@ -103,8 +70,8 @@ export const monthLeadsPacksUpfrontAnalysis = (
   monthLeadsIds: string[],
   sales: salesType[],
   packsUpfrontIds: number[],
-  upperFilterDate: string,
-  weekBegin: string
+  previousMonthBegin: string,
+  monthBegin: string
 ) => {
   //get packs and upfront leads --> 24,K
   let monthPacksUpfrontLeads = 0;
@@ -112,7 +79,11 @@ export const monthLeadsPacksUpfrontAnalysis = (
     const leadPurchasedItems = sales
       .reduce((acc, curr) => {
         const modFilterDate = modifyDate(curr.SaleDateTime);
-        if (curr.ClientId === currentVal && moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+        if (
+          curr.ClientId === currentVal &&
+          moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") &&
+          moment(monthBegin).isAfter(modFilterDate, "hour")
+        ) {
           return [...acc, curr.PurchasedItems];
         }
         return acc;

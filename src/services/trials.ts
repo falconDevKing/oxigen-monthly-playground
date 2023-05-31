@@ -5,14 +5,20 @@ import salesType, { PurchasedItems, modifiedPurchasedItems } from "../types/sale
 import completeClientInfo from "../types/completeClientInfo";
 import visitType, { activeLeadsClientInfoParams } from "../types/visit";
 
-export const monthTrialsPurchasedAnalysis = (sales: salesType[], introServicesIds: number[], authToken: string, upperFilterDate: string, weekBegin: string) => {
+export const monthTrialsPurchasedAnalysis = (
+  sales: salesType[],
+  introServicesIds: number[],
+  authToken: string,
+  previousMonthBegin: string,
+  monthBegin: string
+) => {
   //get trials purchased --> 27, N
   //get trials purchasers ids --> 28
   let monthTrialsPurchased = 0;
   const monthTrialsPurchasersIds = sales
     .reduce((accumulator, currentValue) => {
       const modFilterDate = modifyDate(currentValue.SaleDateTime);
-      if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+      if (moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") && moment(monthBegin).isAfter(modFilterDate, "hour")) {
         const modifiedPurchasedItems: modifiedPurchasedItems[] = currentValue.PurchasedItems?.map((purchasedItem) => ({
           ...purchasedItem,
           clientId: currentValue.ClientId,
@@ -35,7 +41,7 @@ export const monthTrialsPurchasedAnalysis = (sales: salesType[], introServicesId
 
   //fetch trial purcahsers Visits params --> 29
   const monthTrialsPurchasersIdsParams = monthTrialsPurchasersIds.reduce((accumulator, currentValue) => {
-    return [...accumulator, { clientId: currentValue, authToken, startDate: upperFilterDate, endDate: weekBegin }];
+    return [...accumulator, { clientId: currentValue, authToken, startDate: previousMonthBegin, endDate: monthBegin }];
   }, [] as activeLeadsClientInfoParams[]);
 
   return { monthTrialsPurchased, monthTrialsPurchasersIds, monthTrialsPurchasersIdsParams };
@@ -46,8 +52,8 @@ export const trialsFirstVisitAnalysis = (
   monthTrialsToVisits: visitType[][],
   monthTrialsPurchasersIds: string[],
   authToken: string,
-  upperFilterDate: string,
-  weekBegin: string
+  previousMonthBegin: string,
+  monthBegin: string
 ) => {
   // get trials first visits for month ---> 30,O
   // get trials first visits for month Ids ---> 31
@@ -68,7 +74,7 @@ export const trialsFirstVisitAnalysis = (
 
     if (clientData?.FirstClassDate) {
       const modFilterDate = modifyDate(clientData?.FirstClassDate);
-      if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+      if (moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") && moment(monthBegin).isAfter(modFilterDate, "hour")) {
         const clientsAttended = attendedTrialVisits.filter((visit) => visit.ClientId === curVal).length;
 
         if (clientsAttended) {
@@ -85,8 +91,8 @@ export const trialsFirstVisitAnalysis = (
   const monthTrialPurcahsersWithFirstVisitIdsParams = monthTrialPurcahsersWithFirstVisitIds.map((monthTrialPurcahsersWithFirstVisitId) => ({
     authToken,
     clientId: monthTrialPurcahsersWithFirstVisitId,
-    startDate: upperFilterDate,
-    endDate: weekBegin,
+    startDate: previousMonthBegin,
+    endDate: monthBegin,
   }));
 
   return { monthTrialsToFirstVisited, monthTrialPurcahsersWithFirstVisitIds, monthTrialPurcahsersWithFirstVisitIdsParams };
@@ -105,13 +111,13 @@ export const monthTrialsPurcahsersWithVisitToBilledAnalysis = (monthTrialPurcahs
   return { monthTrialPurcahsersWithVisitToBilled, monthTrialPurcahsersWithVisitToBilledIds };
 };
 
-export const salesByServicesAnalysis = (sales: salesType[], packsUpfrontIds: number[], upperFilterDate: string, weekBegin: string) => {
+export const salesByServicesAnalysis = (sales: salesType[], packsUpfrontIds: number[], previousMonthBegin: string, monthBegin: string) => {
   // get packs and upfront for month ---> 35,S
   let monthPacksUpfront = 0;
   const monthPacksUpfrontIds = sales
     .reduce((accumulator, currentValue) => {
       const modFilterDate = modifyDate(currentValue.SaleDateTime);
-      if (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour")) {
+      if (moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") && moment(monthBegin).isAfter(modFilterDate, "hour")) {
         const modifiedPurchasedItems: modifiedPurchasedItems[] = currentValue.PurchasedItems.map((purchasedItem) => ({
           ...purchasedItem,
           clientId: currentValue.ClientId,

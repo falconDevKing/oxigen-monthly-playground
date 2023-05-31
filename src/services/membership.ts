@@ -119,12 +119,12 @@ export const membershipAnalysis = (clientsData: clientType[], activeLeadsIds: st
   return { membershipValues, activeBilled, totalBilled, suspendedMembersIds, declinedMembersIds, terminatedMembersIds, unlimitedMembersIds, limitedMembersIds };
 };
 
-export const weeklyCancellationsAnalysis = async (fileName: string, newTerminations: string[]) => {
+export const monthlyCancellationsAnalysis = async (fileName: string, newTerminations: string[]) => {
   const previousExtraData = await getFile(fileName);
-  const oldTerminations = previousExtraData?.terminatedMembersIds;
+  const oldTerminations = previousExtraData?.terminatedMembersIds ?? [];
 
-  const weeklyCancellationsIDs = newTerminations.filter((newTerminatedId: string) => !oldTerminations.includes(newTerminatedId));
-  const weeklyCancellations = weeklyCancellationsIDs.length;
+  const monthlyCancellationsIDs = newTerminations.filter((newTerminatedId: string) => !oldTerminations.includes(newTerminatedId));
+  const monthlyCancellations = monthlyCancellationsIDs.length;
 
-  return { weeklyCancellations, weeklyCancellationsIDs };
+  return { monthlyCancellations, monthlyCancellationsIDs };
 };

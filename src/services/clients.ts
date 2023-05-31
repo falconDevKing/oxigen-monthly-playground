@@ -2,12 +2,12 @@ import moment from "moment";
 import { modifyDate } from "../helpers/helpers";
 import clientType from "../types/clientType";
 
-export const activeLeadsIdsCreator = (clientsData: clientType[], upperFilterDate: string, weekBegin: string) => {
+export const activeLeadsIdsCreator = (clientsData: clientType[], previousMonthBegin: string, monthBegin: string) => {
   const activeLeadsIds = clientsData.reduce((accumulator, currentValue) => {
     const modFilterDate = modifyDate(currentValue?.CreationDate);
     if (
       currentValue.Status === "Active" ||
-      (moment(modFilterDate).isSameOrAfter(upperFilterDate, "hour") && moment(weekBegin).isAfter(modFilterDate, "hour"))
+      (moment(modFilterDate).isSameOrAfter(previousMonthBegin, "hour") && moment(monthBegin).isAfter(modFilterDate, "hour"))
     ) {
       return [...accumulator, currentValue.Id];
     } else {
