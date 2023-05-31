@@ -108,11 +108,11 @@ const getMonthReport = async () => {
     console.log("services gotten");
 
     //Fetch all sales -> 7 -> upperDate,weekBegin
-    const sales: salesType[] = await fetchSales(authToken, upperSalesDate, monthBegin);
+    const sales: salesType[] = await fetchSales(authToken, previousMonthBegin, monthBegin);
     console.log("sales gotten");
 
     //fecth week classes --> 8
-    const monthClasses: classes[] = await fetchClasses(authToken, upperFilterDate, monthBegin);
+    const monthClasses: classes[] = await fetchClasses(authToken, previousMonthBegin, monthBegin);
     console.log("monthClass gotten", monthClasses.length);
 
     // get noncancelld class Ids --> 9
