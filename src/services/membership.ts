@@ -20,6 +20,10 @@ export const membershipAnalysis = (clientsData: clientType[], activeLeadsIds: st
   const terminatedMembersIds: string[] = [];
   const unlimitedMembersIds: string[] = [];
   const limitedMembersIds: string[] = [];
+  const compMembersIds: string[] = [];
+  const challengeMembersIds: string[] = [];
+  const classPacksMembersIds: string[] = [];
+  const paidInFullMembersIds: string[] = [];
 
   // create grouped clients by statuses ---> 37
   // get grouped clients ---> 34, V - AE
@@ -87,15 +91,19 @@ export const membershipAnalysis = (clientsData: clientType[], activeLeadsIds: st
         }
         if (challengeUpfrontIds.includes(membershipId)) {
           challenge += 1;
+          challengeMembersIds.push(clientId);
         }
         if (complimentaryIds.includes(membershipId)) {
           complimentary += 1;
+          compMembersIds.push(clientId);
         }
         if (paidInFullIds.includes(membershipId)) {
           paidInFull += 1;
+          paidInFullMembersIds.push(clientId);
         }
         if (classPassIds.includes(membershipId)) {
           classPass += 1;
+          classPacksMembersIds.push(clientId);
         }
         if (inActiveIds.includes(membershipId)) {
           inActive += 1;
@@ -116,7 +124,20 @@ export const membershipAnalysis = (clientsData: clientType[], activeLeadsIds: st
   const activeBilled = membershipValues.unlimited + membershipValues.limited + membershipValues.declined;
   const totalBilled = activeBilled + membershipValues.suspended;
 
-  return { membershipValues, activeBilled, totalBilled, suspendedMembersIds, declinedMembersIds, terminatedMembersIds, unlimitedMembersIds, limitedMembersIds };
+  return {
+    membershipValues,
+    activeBilled,
+    totalBilled,
+    suspendedMembersIds,
+    declinedMembersIds,
+    terminatedMembersIds,
+    unlimitedMembersIds,
+    limitedMembersIds,
+    classPacksMembersIds,
+    compMembersIds,
+    challengeMembersIds,
+    paidInFullMembersIds,
+  };
 };
 
 export const monthlyCancellationsAnalysis = async (fileName: string, newTerminations: string[]) => {

@@ -243,6 +243,10 @@ const getMonthReport = async () => {
       terminatedMembersIds,
       limitedMembersIds,
       unlimitedMembersIds,
+      challengeMembersIds,
+      compMembersIds,
+      classPacksMembersIds,
+      paidInFullMembersIds,
     } = membershipAnalysis(clientsData, activeLeadsIds, activeLeadsClientsMemberships);
 
     // get week sales and sales by category ---> 44, AG, AH
@@ -421,6 +425,10 @@ const getMonthReport = async () => {
       staffsPerormance,
       limitedMembersIds,
       unlimitedMembersIds,
+      challengeMembersIds,
+      compMembersIds,
+      classPacksMembersIds,
+      paidInFullMembersIds,
     };
 
     await writeFiler("./src/checks/clients.json", clientsData);
@@ -441,8 +449,24 @@ const getMonthReport = async () => {
 
 // getMonthReport();
 
-const tester = async () => {
-  const { monthlyCancellations, monthlyCancellationsIDs } = await monthlyCancellationsAnalysis(previousReportDate + " extraInfoClientData.json", []);
-};
+// const tester = async () => {
+//   // const accountBalanceIds: string[] = [];
+//   const {
+//     membershipValues,
+//     activeBilled,
+//     totalBilled,
+//     suspendedMembersIds,
+//     declinedMembersIds,
+//     terminatedMembersIds,
+//     unlimitedMembersIds,
+//     limitedMembersIds,
+//     classPacksMembersIds,
+//     compMembersIds,
+//     challengeMembersIds,
+//     paidInFullMembersIds,
+//   } = membershipAnalysis(tClientsData as clientType[], tActiveLeadsIds, tActiveLeadsClientsMemberships);
+
+//   console.log(classPacksMembersIds);
+// };
 
 // tester();
