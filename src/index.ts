@@ -263,7 +263,7 @@ const getMonthReport = async () => {
     // get clients visits 48, AL
     // get clients missed Visits 49, AM
     //get clients unpaid visits 50, AN
-    const { attendance, missedVisits, unpaidVisits, missedVisitsArray, unpaidVisitsArray } = visitAnalysis(monthClassesVisits, previousMonthBegin);
+    const { attendance, missedVisits, unpaidVisits, missedVisitsArray, unpaidVisitsArray } = visitAnalysis(monthClassesVisits, previousMonthBegin, monthBegin);
 
     const { staffClasses, staffsPerormance } = staffPerformanceAnalysis(monthClasses, monthClassesVisits, staffAppointments, previousMonthBegin, monthBegin);
 
@@ -401,6 +401,7 @@ const getMonthReport = async () => {
       sales,
       monthClasses,
       monthClassesVisits,
+      monthLeadsIds,
       activeLeadsIds,
       activeLeadsClientsMemberships,
       monthTrialsToVisits,
@@ -417,6 +418,7 @@ const getMonthReport = async () => {
       accountBalanceDebtorsIds,
       missedVisitsArray,
       unpaidVisitsArray,
+      nonCancelledClassesIds,
       leadsPurchasedIds,
       monthLeadsCompleteClients,
       monthTrialPurcahsersWithFirstVisitIdsCompleteClients,
